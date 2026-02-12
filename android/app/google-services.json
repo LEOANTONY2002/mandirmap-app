@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "289927639173",
+    "project_id": "mandirmapapp",
+    "storage_bucket": "mandirmapapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289927639173:android:ad47c73d88fb141a80b9ec",
+        "android_client_info": {
+          "package_name": "com.mandirmap.mandirmap_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwWT7_UU_q-mjk4BP3m8L1ex7Ah86bn6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

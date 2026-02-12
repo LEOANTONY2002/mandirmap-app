@@ -1,0 +1,5 @@
+Analyzing mandirmap_app...                                      
+
+   info - Unnecessary use of string interpolation - lib\features\astrology\presentation\pages\astrologer_details_page.dart:92:35 - unnecessary_string_interpolations
+   info - Unnecessary use of string interpolation - lib\features\astrology\presentation\pages\astrology_page.dart:195:19 - unnecessary_string_interpolations
+

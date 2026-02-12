@@ -1,0 +1,19 @@
+Analyzing mandirmap_app...                                      
+
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrologer_details_page.dart:57:58 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrology_page.dart:42:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrology_page.dart:43:38 - deprecated_member_use
+   info - An uninitialized field should have an explicit type annotation - lib\features\astrology\presentation\pages\astrology_page.dart:131:9 - prefer_typing_uninitialized_variables
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrology_page.dart:143:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrology_page.dart:146:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\astrology\presentation\pages\astrology_page.dart:236:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\pages\home_page.dart:98:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\pages\home_page.dart:247:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\presentation\pages\home_page.dart:330:43 - deprecated_member_use
+  error - Target of URI doesn't exist: '../data/models/media_model.dart' - lib\features\reels\presentation\widgets\reel_item.dart:6:8 - uri_does_not_exist
+  error - Undefined class 'MediaModel' - lib\features\reels\presentation\widgets\reel_item.dart:9:9 - undefined_class
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\reels\presentation\widgets\reel_item.dart:91:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\reels\presentation\widgets\reel_item.dart:93:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\temple_details\presentation\pages\temple_details_page.dart:92:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\temple_details\presentation\pages\temple_details_page.dart:373:52 - deprecated_member_use
+
