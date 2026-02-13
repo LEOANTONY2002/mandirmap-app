@@ -46,23 +46,43 @@ final deitiesProvider = FutureProvider<List<DeityModel>>((ref) async {
   return repository.getDeities();
 });
 
-final selectedDistrictProvider = StateProvider<String>((ref) => 'Kannur');
+class SelectedDistrictNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
 
-final districtsListProvider = Provider<List<String>>(
-  (ref) => ['Kannur', 'Malappuram', 'Kozhikode', 'Thrissur', 'Kochi'],
-);
+  void update(String? districtId) => state = districtId;
+}
+
+final selectedDistrictProvider =
+    NotifierProvider<SelectedDistrictNotifier, String?>(
+      SelectedDistrictNotifier.new,
+    );
+
+final districtsListProvider = FutureProvider<List<DistrictModel>>((ref) async {
+  final repository = ref.watch(homeRepositoryProvider);
+  final districts = await repository.getDistricts();
+
+  // Set default selection if none exists
+  if (ref.read(selectedDistrictProvider) == null && districts.isNotEmpty) {
+    ref.read(selectedDistrictProvider.notifier).update(districts.first.id);
+  }
+
+  return districts;
+});
 
 final festivalsProvider = FutureProvider<List<FestivalModel>>((ref) async {
   final repository = ref.watch(homeRepositoryProvider);
   final district = ref.watch(selectedDistrictProvider);
 
+  if (district == null) return [];
+
   // Enterprise approach: Always filter on the backend for performance and scalability
   return repository.getFestivals(district: district);
 });
 
-final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(() {
-  return SearchQueryNotifier();
-});
+final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(
+  SearchQueryNotifier.new,
+);
 
 class SearchQueryNotifier extends Notifier<String> {
   @override

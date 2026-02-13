@@ -14,9 +14,14 @@ class TempleRepository {
 
   Future<LocationModel> getTempleDetails(String id) async {
     try {
+      print('Fetching details for temple ID: $id');
       final response = await _dio.get('/locations/$id');
-      return LocationModel.fromJson(response.data);
+      print('Response received: ${response.data != null}');
+      final model = LocationModel.fromJson(response.data);
+      print('Model parsed successfully: ${model.name}');
+      return model;
     } catch (e) {
+      print('Error fetching temple details: $e');
       rethrow;
     }
   }

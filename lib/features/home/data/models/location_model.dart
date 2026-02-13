@@ -10,6 +10,10 @@ class LocationModel {
   final int totalRatings;
   final double? distance; // In meters, from PostGIS
   final List<String> photos;
+  final String? district;
+  final String? districtMl;
+  final String? state;
+  final String? stateMl;
   final TempleModel? temple;
   final HotelModel? hotel;
   final RestaurantModel? restaurant;
@@ -26,6 +30,10 @@ class LocationModel {
     required this.totalRatings,
     this.distance,
     required this.photos,
+    this.district,
+    this.districtMl,
+    this.state,
+    this.stateMl,
     this.temple,
     this.hotel,
     this.restaurant,
@@ -48,8 +56,12 @@ class LocationModel {
               : null,
       photos:
           json['media'] != null
-              ? (json['media'] as List).map((m) => m['url'] as String).toList()
-              : [],
+              ? (json['media'] as List).map((m) => m['url'].toString()).toList()
+              : <String>[],
+      district: json['district'],
+      districtMl: json['districtMl'],
+      state: json['state'],
+      stateMl: json['stateMl'],
       temple:
           json['temple'] != null ? TempleModel.fromJson(json['temple']) : null,
       hotel: json['hotel'] != null ? HotelModel.fromJson(json['hotel']) : null,
@@ -80,7 +92,9 @@ class HotelModel {
       contactPhone: json['contactPhone'],
       whatsapp: json['whatsapp'],
       amenities:
-          json['amenities'] != null ? List<String>.from(json['amenities']) : [],
+          json['amenities'] != null
+              ? List<String>.from(json['amenities'])
+              : <String>[],
     );
   }
 }
@@ -95,7 +109,9 @@ class RestaurantModel {
     return RestaurantModel(
       isPureVeg: json['isPureVeg'] ?? true,
       menuItems:
-          json['menuItems'] != null ? List<String>.from(json['menuItems']) : [],
+          json['menuItems'] != null
+              ? List<String>.from(json['menuItems'])
+              : <String>[],
     );
   }
 }
@@ -105,7 +121,7 @@ class TempleModel {
   final String? openTime;
   final String? closeTime;
   final List<DeityModel>? deities;
-  final Map<String, dynamic>? vazhipaduData;
+  final dynamic vazhipaduData;
 
   TempleModel({
     this.history,
@@ -124,9 +140,10 @@ class TempleModel {
       deities:
           json['deities'] != null
               ? (json['deities'] as List)
-                  .map((i) => DeityModel.fromJson(i['deity']))
+                  .where((i) => i['deity'] != null)
+                  .map<DeityModel>((i) => DeityModel.fromJson(i['deity']))
                   .toList()
-              : null,
+              : <DeityModel>[],
     );
   }
 }

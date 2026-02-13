@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/auth_repository.dart';
-import '../../../../core/services/notification_service.dart';
+import 'auth_state_provider.dart';
 
 final authControllerProvider =
     NotifierProvider<AuthController, AsyncValue<void>>(() {
@@ -13,49 +13,56 @@ class AuthController extends Notifier<AsyncValue<void>> {
     return const AsyncValue.data(null);
   }
 
-  String? _verificationId;
-  String? get verificationId => _verificationId;
-
-  Future<void> sendOtp(String phoneNumber, Function(String) onCodeSent) async {
+  Future<void> login(String email, String password) async {
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(authRepositoryProvider);
-      await repository.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        onCodeSent: (vId) {
-          _verificationId = vId;
-          onCodeSent(vId);
-          state = const AsyncValue.data(null);
-        },
-        onVerificationFailed: (e) {
-          state = AsyncValue.error(e, StackTrace.current);
-        },
-      );
-    } catch (e, stack) {
-      state = AsyncValue.error(e, stack);
+      await repository.login(email: email, password: password);
+
+      // Update state
+      ref.read(authStateProvider.notifier).login();
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
 
-  Future<void> verifyOtp(String smsCode) async {
-    if (_verificationId == null) return;
-
-    state = const AsyncValue.loading();
+  Future<void> signup({
+    required String fullName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+    required String stateAttr,
+    required String district,
+  }) async {
+    state = const AsyncLoading();
     try {
-      final repository = ref.read(authRepositoryProvider);
-      await repository.signInWithOtp(
-        verificationId: _verificationId!,
-        smsCode: smsCode,
-      );
+      await ref
+          .read(authRepositoryProvider)
+          .signup(
+            fullName: fullName,
+            email: email,
+            phoneNumber: phoneNumber,
+            password: password,
+            state: stateAttr,
+            district: district,
+          );
 
-      // Successfully logged in, now sync FCM token
-      final token = await NotificationService.getToken();
-      if (token != null) {
-        await repository.updateFcmToken(token);
-      }
+      // Update state
+      ref.read(authStateProvider.notifier).login();
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
+    }
+  }
 
-      state = const AsyncValue.data(null);
-    } catch (e, stack) {
-      state = AsyncValue.error(e, stack);
+  Future<void> logout() async {
+    state = const AsyncLoading();
+    try {
+      await ref.read(authRepositoryProvider).signOut();
+      ref.read(authStateProvider.notifier).logout();
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
     }
   }
 }

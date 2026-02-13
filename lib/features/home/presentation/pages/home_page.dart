@@ -160,58 +160,69 @@ class _CategoryBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final districts = ref.watch(districtsListProvider);
+    final districtsAsync = ref.watch(districtsListProvider);
     final selectedDistrict = ref.watch(selectedDistrictProvider);
 
-    return SizedBox(
-      height: 38.h,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        scrollDirection: Axis.horizontal,
-        itemCount: districts.length,
-        separatorBuilder: (context, index) => SizedBox(width: 12.w),
-        itemBuilder: (context, index) {
-          final district = districts[index];
-          final isSelected = district == selectedDistrict;
-          return GestureDetector(
-            onTap: () {
-              ref.read(selectedDistrictProvider.notifier).state = district;
-            },
-            child: Container(
+    return districtsAsync.when(
+      data:
+          (districts) => SizedBox(
+            height: 38.h,
+            child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(
-                  color:
-                      isSelected
-                          ? AppColors.primary
-                          : AppColors.border.withValues(alpha: 0.5),
-                ),
-                boxShadow:
-                    isSelected
-                        ? [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.2),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ]
-                        : null,
-              ),
-              child: Text(
-                district,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                  fontSize: 13.sp,
-                ),
-              ),
+              scrollDirection: Axis.horizontal,
+              itemCount: districts.length,
+              separatorBuilder: (context, index) => SizedBox(width: 12.w),
+              itemBuilder: (context, index) {
+                final district = districts[index];
+                final isSelected = district.id == selectedDistrict;
+                return GestureDetector(
+                  onTap: () {
+                    ref
+                        .read(selectedDistrictProvider.notifier)
+                        .update(district.id);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.primary : Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(
+                        color:
+                            isSelected
+                                ? AppColors.primary
+                                : AppColors.border.withValues(alpha: 0.5),
+                      ),
+                      boxShadow:
+                          isSelected
+                              ? [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                              : null,
+                    ),
+                    child: Text(
+                      district.name,
+                      style: TextStyle(
+                        color:
+                            isSelected ? Colors.white : AppColors.textSecondary,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.w500,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
+          ),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

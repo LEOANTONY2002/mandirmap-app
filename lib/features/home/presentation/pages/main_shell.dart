@@ -6,6 +6,8 @@ import '../../../astrology/presentation/pages/astrology_page.dart';
 import '../../../favorites/presentation/pages/favorites_page.dart';
 import '../../../auth/presentation/pages/profile_page.dart';
 
+import 'package:easy_localization/easy_localization.dart';
+
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
@@ -39,23 +41,26 @@ class _MainShellState extends State<MainShell> {
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textSecondary,
         showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.auto_stories),
-            label: 'Astrology',
+            icon: const Icon(Icons.home_filled),
+            label: 'home'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.play_circle_outline),
-            label: 'Reels',
+            icon: const Icon(Icons.auto_stories),
+            label: 'astrology'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Favorites',
+            icon: const Icon(Icons.play_circle_outline),
+            label: 'reels'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
+            icon: const Icon(Icons.favorite_border),
+            label: 'favorites'.tr(),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+            label: 'profile'.tr(),
           ),
         ],
       ),

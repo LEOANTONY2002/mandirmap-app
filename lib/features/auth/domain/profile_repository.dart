@@ -20,4 +20,12 @@ class ProfileRepository {
       rethrow;
     }
   }
+
+  Future<void> updateProfile(Map<String, dynamic> data) async {
+    try {
+      await _dio.patch('/users/profile', data: data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

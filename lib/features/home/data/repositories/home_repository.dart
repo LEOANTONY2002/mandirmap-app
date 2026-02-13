@@ -12,6 +12,16 @@ class HomeRepository {
 
   HomeRepository(this._dio);
 
+  Future<List<DistrictModel>> getDistricts() async {
+    try {
+      final response = await _dio.get('/locations/districts');
+      final List data = response.data;
+      return data.map((json) => DistrictModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<LocationModel>> getNearbyTemples({
     required double lat,
     required double lng,
@@ -77,5 +87,16 @@ class HomeRepository {
     } catch (e) {
       rethrow;
     }
+  }
+}
+
+class DistrictModel {
+  final String id;
+  final String name;
+
+  DistrictModel({required this.id, required this.name});
+
+  factory DistrictModel.fromJson(Map<String, dynamic> json) {
+    return DistrictModel(id: json['id'], name: json['name']);
   }
 }

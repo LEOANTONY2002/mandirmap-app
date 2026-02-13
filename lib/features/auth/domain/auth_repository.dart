@@ -1,58 +1,99 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../../core/network/api_client.dart';
+import '../domain/user_model.dart';
+
+import '../../../../core/config/app_constants.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepository(FirebaseAuth.instance, ref.watch(dioProvider));
+  return AuthRepository(ref.watch(dioProvider));
 });
 
 class AuthRepository {
-  final FirebaseAuth _auth;
   final Dio _dio;
+  final _secureStorage = const FlutterSecureStorage();
 
-  AuthRepository(this._auth, this._dio);
+  AuthRepository(this._dio);
 
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
-
-  Future<void> updateFcmToken(String fcmToken) async {
+  Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  }) async {
     try {
-      await _dio.patch('/users/fcm-token', data: {'token': fcmToken});
-    } catch (e) {
-      // Log error but don't break the app
-      print('Error updating FCM token: $e');
+      final response = await _dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+      );
+
+      final data = response.data;
+      final user = UserModel.fromJson(data['user']);
+      final token = data['token'];
+
+      // Securely store token
+      await _secureStorage.write(key: AppConstants.authTokenKey, value: token);
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(AppConstants.isLoggedInKey, true);
+
+      return {'user': user, 'token': token};
+    } on DioException catch (e) {
+      final message = e.response?.data?['message'] ?? 'Login failed';
+      throw Exception(message);
     }
   }
 
-  Future<void> verifyPhoneNumber({
+  Future<Map<String, dynamic>> signup({
+    required String fullName,
+    required String email,
     required String phoneNumber,
-    required Function(String verificationId) onCodeSent,
-    required Function(FirebaseAuthException e) onVerificationFailed,
+    required String password,
+    required String state,
+    required String district,
   }) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto-resolution (not always triggered)
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: onVerificationFailed,
-      codeSent: (String verificationId, int? resendToken) {
-        onCodeSent(verificationId);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+    try {
+      final response = await _dio.post(
+        '/auth/signup',
+        data: {
+          'fullName': fullName,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'password': password,
+          'state': state,
+          'district': district,
+        },
+      );
+
+      final data = response.data;
+      final user = UserModel.fromJson(data['user']);
+      final token = data['token'];
+
+      // Securely store token
+      await _secureStorage.write(key: AppConstants.authTokenKey, value: token);
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(AppConstants.isLoggedInKey, true);
+
+      return {'user': user, 'token': token};
+    } on DioException catch (e) {
+      final message = e.response?.data?['message'] ?? 'Signup failed';
+      throw Exception(message);
+    }
   }
 
-  Future<UserCredential> signInWithOtp({
-    required String verificationId,
-    required String smsCode,
-  }) async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-    return await _auth.signInWithCredential(credential);
+  Future<void> signOut() async {
+    await _secureStorage.delete(key: AppConstants.authTokenKey);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(AppConstants.isLoggedInKey, false);
   }
 
-  Future<void> signOut() async => await _auth.signOut();
+  Future<String?> getToken() async {
+    return await _secureStorage.read(key: AppConstants.authTokenKey);
+  }
+
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(AppConstants.isLoggedInKey) ?? false;
+  }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../home/data/models/location_model.dart';
+import '../../../temple_details/presentation/pages/temple_details_page.dart';
 
 class FestivalDetailsPage extends StatelessWidget {
   final FestivalModel festival;
@@ -125,21 +126,39 @@ class FestivalDetailsPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 15.h),
-                    // Placeholder for location info
-                    Container(
-                      padding: EdgeInsets.all(15.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.temple_hindu, color: AppColors.primary),
-                          SizedBox(width: 15.w),
-                          const Text('View Temple Details'),
-                          const Spacer(),
-                          const Icon(Icons.arrow_forward_ios, size: 16),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => TempleDetailsPage(
+                                  templeId: festival.locationId!,
+                                ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(15.r),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.temple_hindu, color: AppColors.primary),
+                            SizedBox(width: 15.w),
+                            const Text(
+                              'View Temple Details',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const Spacer(),
+                            const Icon(Icons.arrow_forward_ios, size: 16),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -162,7 +181,11 @@ class FestivalDetailsPage extends StatelessWidget {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Reminder feature coming soon!')),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,

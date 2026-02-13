@@ -1,48 +1,39 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart';
 
 class NotificationService {
-  static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
 
   static Future<void> initialize() async {
-    // 1. Request Permission (already asked in onboarding, but good to have)
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    if (kDebugMode) {
-      print('User granted permission: ${settings.authorizationStatus}');
-    }
-
-    // 2. Setup Local Notifications for Foreground
+    // Setup Local Notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    // Use DARLING style for iOS if needed
     const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
 
-    await _localNotifications.initialize(initializationSettings);
-
-    // 3. Listen for foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    try {
+      await _localNotifications.initialize(initializationSettings);
       if (kDebugMode) {
-        print('Got a message whilst in the foreground!');
+        print('Notification Service initialized for local notifications.');
       }
-      _showLocalNotification(message);
-    });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error initializing Notification Service: $e');
+      }
+    }
   }
 
-  static Future<void> _showLocalNotification(RemoteMessage message) async {
+  static Future<void> showLocalNotification({
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'high_importance_channel', // id
-          'High Importance Notifications', // title
+          'high_importance_channel',
+          'High Importance Notifications',
           importance: Importance.max,
           priority: Priority.high,
         );
@@ -51,25 +42,11 @@ class NotificationService {
     );
 
     await _localNotifications.show(
-      message.hashCode,
-      message.notification?.title,
-      message.notification?.body,
+      DateTime.now().millisecond,
+      title,
+      body,
       platformChannelSpecifics,
+      payload: payload,
     );
-  }
-
-  static Future<String?> getToken() async {
-    try {
-      String? token = await _messaging.getToken();
-      if (kDebugMode) {
-        print('FCM Token: $token');
-      }
-      return token;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error getting FCM token: $e');
-      }
-      return null;
-    }
   }
 }
