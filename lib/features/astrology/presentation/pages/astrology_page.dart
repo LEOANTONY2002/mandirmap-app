@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../providers/astrology_providers.dart';
 import '../../data/models/astrologer_model.dart';
 import 'astrology_chat_page.dart';
@@ -24,38 +25,41 @@ class AstrologyPage extends ConsumerWidget {
                 height: 180.h,
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                decoration: BoxDecoration(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(20.r),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      'https://images.unsplash.com/photo-1532073150508-0c1df023bdd5?w=800&q=80',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.1),
-                        Colors.black.withValues(alpha: 0.6),
-                      ],
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Talk to\nAstrologer',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.bold,
-                        height: 1.1,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      const AppNetworkImage(
+                        url:
+                            'https://images.unsplash.com/photo-1532073150508-0c1df023bdd5?w=800&q=80',
+                        fit: BoxFit.cover,
                       ),
-                    ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.1),
+                              Colors.black.withValues(alpha: 0.6),
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Talk to\nAstrologer',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.bold,
+                              height: 1.1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -154,10 +158,14 @@ class _AstrologerCard extends StatelessWidget {
         children: [
           Stack(
             children: [
-              CircleAvatar(
-                radius: 30.r,
-                backgroundImage: const NetworkImage(
-                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+              ClipOval(
+                child: AppNetworkImage(
+                  url:
+                      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+                  height: 60.r,
+                  width: 60.r,
+                  fit: BoxFit.cover,
+                  fallbackIcon: Icons.person,
                 ),
               ),
               Positioned(

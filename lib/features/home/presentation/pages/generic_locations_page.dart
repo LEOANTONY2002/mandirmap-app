@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import '../../data/repositories/home_repository.dart';
 
@@ -59,11 +60,6 @@ class GenericLocationsPage extends ConsumerWidget {
   }
 
   Widget _buildLocationCard(LocationModel location) {
-    final imageUrl =
-        location.photos.isNotEmpty
-            ? location.photos.first
-            : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=200&q=80';
-
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
@@ -82,11 +78,10 @@ class GenericLocationsPage extends ConsumerWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-            child: Image.network(
-              imageUrl,
+            child: AppNetworkImage(
+              url: location.photos.isNotEmpty ? location.photos.first : null,
               height: 160.h,
               width: double.infinity,
-              fit: BoxFit.cover,
             ),
           ),
           Padding(

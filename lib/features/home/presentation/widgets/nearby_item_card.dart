@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mandirmap_app/features/hotel_details/presentation/pages/hotel_details_page.dart';
@@ -48,13 +49,14 @@ class NearbyItemCard extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
               child: Stack(
                 children: [
-                  Image.network(
-                    location.photos.isNotEmpty
-                        ? location.photos.first
-                        : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+                  AppNetworkImage(
+                    url:
+                        location.photos.isNotEmpty
+                            ? location.photos.first
+                            : null,
                     height: 160.h,
                     width: double.infinity,
-                    fit: BoxFit.cover,
+                    fallbackIcon: Icons.hotel,
                   ),
                   Positioned(
                     top: 10.h,

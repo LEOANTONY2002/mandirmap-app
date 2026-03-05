@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/astrologer_model.dart';
 
 class AstrologerDetailsPage extends StatefulWidget {
@@ -60,10 +61,14 @@ class _AstrologerDetailsPageState extends State<AstrologerDetailsPage> {
                       ),
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 35.r,
-                            backgroundImage: const NetworkImage(
-                              'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+                          ClipOval(
+                            child: AppNetworkImage(
+                              url:
+                                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
+                              height: 70.r,
+                              width: 70.r,
+                              fit: BoxFit.cover,
+                              fallbackIcon: Icons.person,
                             ),
                           ),
                           SizedBox(width: 15.w),
@@ -371,17 +376,14 @@ class _AstrologerDetailsPageState extends State<AstrologerDetailsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             3,
-            (index) => Container(
-              width: 100.w,
-              height: 100.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                image: const DecorationImage(
-                  image: NetworkImage(
+            (index) => ClipRRect(
+              borderRadius: BorderRadius.circular(10.r),
+              child: const AppNetworkImage(
+                url:
                     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
-                  ),
-                  fit: BoxFit.cover,
-                ),
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
               ),
             ),
           ),

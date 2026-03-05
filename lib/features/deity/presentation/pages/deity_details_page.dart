@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../../home/presentation/widgets/nearby_temple_tile.dart';
@@ -61,16 +62,12 @@ class DeityDetailsPage extends ConsumerWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  deity.photoUrl != null
-                      ? Image.network(deity.photoUrl!, fit: BoxFit.cover)
-                      : Container(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        child: Icon(
-                          Icons.temple_hindu,
-                          size: 100.r,
-                          color: AppColors.primary,
-                        ),
-                      ),
+                  AppNetworkImage(
+                    url: deity.photoUrl,
+                    fit: BoxFit.cover,
+                    fallbackIcon: Icons.temple_hindu,
+                    fallbackIconSize: 60,
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(

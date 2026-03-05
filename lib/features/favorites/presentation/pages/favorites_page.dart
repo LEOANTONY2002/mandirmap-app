@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../temple_details/presentation/pages/temple_details_page.dart';
 import '../providers/favorites_providers.dart';
 
@@ -95,13 +96,14 @@ class FavoritesPage extends ConsumerWidget {
                         borderRadius: BorderRadius.horizontal(
                           left: Radius.circular(15.r),
                         ),
-                        child: Image.network(
-                          temple.photos.isNotEmpty
-                              ? temple.photos.first
-                              : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&q=80',
+                        child: AppNetworkImage(
+                          url:
+                              temple.photos.isNotEmpty
+                                  ? temple.photos.first
+                                  : null,
                           height: 100.h,
                           width: 100.h,
-                          fit: BoxFit.cover,
+                          fallbackIcon: Icons.temple_hindu,
                         ),
                       ),
                       Expanded(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import '../providers/home_providers.dart';
 
@@ -50,11 +51,6 @@ class RestaurantsPage extends ConsumerWidget {
   }
 
   Widget _buildRestaurantCard(LocationModel restaurant) {
-    final imageUrl =
-        restaurant.photos.isNotEmpty
-            ? restaurant.photos.first
-            : 'https://images.unsplash.com/photo-1517248135467-4c7ed9d42177?w=800&q=80';
-
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
@@ -73,11 +69,12 @@ class RestaurantsPage extends ConsumerWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-            child: Image.network(
-              imageUrl,
+            child: AppNetworkImage(
+              url:
+                  restaurant.photos.isNotEmpty ? restaurant.photos.first : null,
               height: 160.h,
               width: double.infinity,
-              fit: BoxFit.cover,
+              fallbackIcon: Icons.restaurant,
             ),
           ),
           Padding(

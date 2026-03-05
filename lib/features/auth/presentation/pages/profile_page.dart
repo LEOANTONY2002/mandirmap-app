@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../domain/user_model.dart';
 import '../../../../features/favorites/presentation/pages/favorites_page.dart';
 import 'edit_profile_page.dart';
@@ -64,14 +65,16 @@ class ProfilePage extends ConsumerWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.primary, width: 2),
               ),
-              child: CircleAvatar(
-                radius: 35.r,
-                backgroundImage:
-                    user.avatarUrl != null
-                        ? NetworkImage(user.avatarUrl!)
-                        : const NetworkImage(
-                          'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=200&q=80',
-                        ),
+              child: ClipOval(
+                child: AppNetworkImage(
+                  url:
+                      user.avatarUrl ??
+                      'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=200&q=80',
+                  height: 70.r,
+                  width: 70.r,
+                  fit: BoxFit.cover,
+                  fallbackIcon: Icons.person,
+                ),
               ),
             ),
             Positioned(

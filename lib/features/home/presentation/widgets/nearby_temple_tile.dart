@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 
 class NearbyTempleTile extends StatelessWidget {
@@ -30,13 +31,12 @@ class NearbyTempleTile extends StatelessWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
             child: Stack(
               children: [
-                Image.network(
-                  location.photos.isNotEmpty
-                      ? location.photos.first
-                      : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&q=80',
+                AppNetworkImage(
+                  url:
+                      location.photos.isNotEmpty ? location.photos.first : null,
                   height: 160.h,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fallbackIcon: Icons.temple_hindu,
                 ),
                 Positioned(
                   top: 12.h,

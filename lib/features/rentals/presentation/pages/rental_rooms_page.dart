@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 
@@ -90,11 +91,6 @@ class RentalRoomsPage extends ConsumerWidget {
   }
 
   Widget _buildRentalCard(LocationModel hotel) {
-    final imageUrl =
-        hotel.photos.isNotEmpty
-            ? hotel.photos.first
-            : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80';
-
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
@@ -115,11 +111,11 @@ class RentalRoomsPage extends ConsumerWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-                child: Image.network(
-                  imageUrl,
+                child: AppNetworkImage(
+                  url: hotel.photos.isNotEmpty ? hotel.photos.first : null,
                   height: 180.h,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fallbackIcon: Icons.hotel,
                 ),
               ),
               Positioned(

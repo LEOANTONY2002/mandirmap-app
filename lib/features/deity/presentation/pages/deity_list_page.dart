@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import 'deity_details_page.dart';
 
@@ -69,22 +70,14 @@ class DeityListPage extends ConsumerWidget {
                               offset: const Offset(0, 5),
                             ),
                           ],
-                          image:
-                              deity.photoUrl != null
-                                  ? DecorationImage(
-                                    image: NetworkImage(deity.photoUrl!),
-                                    fit: BoxFit.cover,
-                                  )
-                                  : null,
                         ),
-                        child:
-                            deity.photoUrl == null
-                                ? Icon(
-                                  Icons.temple_hindu,
-                                  color: AppColors.primary,
-                                  size: 30.sp,
-                                )
-                                : null,
+                        child: ClipOval(
+                          child: AppNetworkImage(
+                            url: deity.photoUrl,
+                            fit: BoxFit.cover,
+                            fallbackIcon: Icons.temple_hindu,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.h),

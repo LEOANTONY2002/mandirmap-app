@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import '../../../festival/presentation/pages/festival_details_page.dart';
 import '../../../temple_details/presentation/pages/temple_details_page.dart';
@@ -125,13 +126,14 @@ class _SearchResultsSection extends ConsumerWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
-                      child: Image.network(
-                        result.photos.isNotEmpty
-                            ? result.photos.first
-                            : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&q=80',
+                      child: AppNetworkImage(
+                        url:
+                            result.photos.isNotEmpty
+                                ? result.photos.first
+                                : null,
                         height: 60.h,
                         width: 60.h,
-                        fit: BoxFit.cover,
+                        fallbackIcon: Icons.place,
                       ),
                     ),
                     SizedBox(width: 12.w),
@@ -309,11 +311,11 @@ class _FestivalCard extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(14.r)),
-                child: Image.network(
-                  festival.photoUrl ??
-                      'https://images.unsplash.com/photo-1590760461230-8f453ddb8c0d?w=800&q=80',
+                child: AppNetworkImage(
+                  url: festival.photoUrl,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  fallbackIcon: Icons.festival,
                 ),
               ),
             ),

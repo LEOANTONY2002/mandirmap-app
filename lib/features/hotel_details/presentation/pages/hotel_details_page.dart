@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/data/repositories/home_repository.dart';
 
@@ -48,11 +49,14 @@ class HotelDetailsPage extends ConsumerWidget {
                     background: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(
-                          hotel.photos.isNotEmpty
-                              ? hotel.photos.first
-                              : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+                        AppNetworkImage(
+                          url:
+                              hotel.photos.isNotEmpty
+                                  ? hotel.photos.first
+                                  : null,
                           fit: BoxFit.cover,
+                          fallbackIcon: Icons.hotel,
+                          fallbackIconSize: 60,
                         ),
                         Container(
                           decoration: BoxDecoration(

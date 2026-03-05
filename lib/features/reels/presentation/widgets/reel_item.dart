@@ -3,6 +3,7 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/media_model.dart';
 
 class ReelItem extends StatefulWidget {
@@ -122,17 +123,14 @@ class _ReelItemState extends State<ReelItem> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 20.r,
-                      backgroundColor: AppColors.primary,
-                      backgroundImage:
-                          widget.media.userAvatar != null
-                              ? NetworkImage(widget.media.userAvatar!)
-                              : null,
-                      child:
-                          widget.media.userAvatar == null
-                              ? const Icon(Icons.person, color: Colors.white)
-                              : null,
+                    ClipOval(
+                      child: AppNetworkImage(
+                        url: widget.media.userAvatar,
+                        height: 40.r,
+                        width: 40.r,
+                        fit: BoxFit.cover,
+                        fallbackIcon: Icons.person,
+                      ),
                     ),
                     SizedBox(width: 12.w),
                     Text(

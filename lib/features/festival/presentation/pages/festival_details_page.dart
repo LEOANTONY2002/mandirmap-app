@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../temple_details/presentation/pages/temple_details_page.dart';
 
@@ -23,17 +24,12 @@ class FestivalDetailsPage extends StatelessWidget {
                 festival.name,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              background:
-                  festival.photoUrl != null
-                      ? Image.network(festival.photoUrl!, fit: BoxFit.cover)
-                      : Container(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        child: Icon(
-                          Icons.festival,
-                          size: 100.r,
-                          color: AppColors.primary,
-                        ),
-                      ),
+              background: AppNetworkImage(
+                url: festival.photoUrl,
+                fit: BoxFit.cover,
+                fallbackIcon: Icons.festival,
+                fallbackIconSize: 60,
+              ),
             ),
           ),
           SliverToBoxAdapter(

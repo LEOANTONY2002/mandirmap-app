@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import 'festival_details_page.dart';
 
@@ -139,25 +140,13 @@ class FestivalListPage extends ConsumerWidget {
                               borderRadius: BorderRadius.horizontal(
                                 left: Radius.circular(15.r),
                               ),
-                              child:
-                                  festival.photoUrl != null
-                                      ? Image.network(
-                                        festival.photoUrl!,
-                                        width: 120.w,
-                                        height: 120.h,
-                                        fit: BoxFit.cover,
-                                      )
-                                      : Container(
-                                        width: 120.w,
-                                        color: AppColors.primary.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                        child: Icon(
-                                          Icons.festival,
-                                          color: AppColors.primary,
-                                          size: 40.sp,
-                                        ),
-                                      ),
+                              child: AppNetworkImage(
+                                url: festival.photoUrl,
+                                width: 120.w,
+                                height: 120.h,
+                                fit: BoxFit.cover,
+                                fallbackIcon: Icons.festival,
+                              ),
                             ),
                             Expanded(
                               child: Padding(

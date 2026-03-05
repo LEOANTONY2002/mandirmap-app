@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../providers/temple_providers.dart';
 import '../../../favorites/presentation/providers/favorites_providers.dart';
 import '../../../favorites/data/favorites_repository.dart';
@@ -44,11 +45,14 @@ class TempleDetailsPage extends ConsumerWidget {
                     background: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(
-                          temple.photos.isNotEmpty
-                              ? temple.photos.first
-                              : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&q=80',
+                        AppNetworkImage(
+                          url:
+                              temple.photos.isNotEmpty
+                                  ? temple.photos.first
+                                  : null,
                           fit: BoxFit.cover,
+                          fallbackIcon: Icons.temple_hindu,
+                          fallbackIconSize: 60,
                         ),
                         // Dark gradient at bottom for text readability
                         Container(
@@ -600,7 +604,11 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
       itemBuilder: (context, index) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(15.r),
-          child: Image.network(widget.temple.photos[index], fit: BoxFit.cover),
+          child: AppNetworkImage(
+            url: widget.temple.photos[index],
+            fit: BoxFit.cover,
+            fallbackIcon: Icons.image,
+          ),
         );
       },
     );

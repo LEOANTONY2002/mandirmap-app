@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../providers/home_providers.dart';
 import '../../../../features/deity/presentation/pages/deity_list_page.dart';
 import '../../../../features/deity/presentation/pages/deity_details_page.dart';
@@ -81,13 +82,6 @@ class DeityList extends ConsumerWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: AppColors.surface,
-                            image:
-                                deity.photoUrl != null
-                                    ? DecorationImage(
-                                      image: NetworkImage(deity.photoUrl!),
-                                      fit: BoxFit.cover,
-                                    )
-                                    : null,
                             border: Border.all(
                               color: AppColors.border.withValues(alpha: 0.3),
                             ),
@@ -99,14 +93,13 @@ class DeityList extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          child:
-                              deity.photoUrl == null
-                                  ? Icon(
-                                    Icons.temple_hindu,
-                                    color: AppColors.primary,
-                                    size: 28.sp,
-                                  )
-                                  : null,
+                          child: ClipOval(
+                            child: AppNetworkImage(
+                              url: deity.photoUrl,
+                              fit: BoxFit.cover,
+                              fallbackIcon: Icons.temple_hindu,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 8.h),
                         Text(
