@@ -12,7 +12,7 @@ import 'nearby_temples_page.dart';
 import '../providers/home_providers.dart';
 import '../widgets/home_header.dart';
 import '../widgets/deity_list.dart';
-import '../widgets/nearby_item_card.dart';
+import '../widgets/temple_card.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -34,8 +34,8 @@ class HomePage extends ConsumerWidget {
                   const _SearchResultsSection()
                 else ...[
                   const _CategoryBar(),
-                  SizedBox(height: 16.h),
-                  const _FeaturedBannerSection(),
+                  SizedBox(height: 24.h),
+                  const _FestivalSection(),
                   SizedBox(height: 24.h),
                   const DeityList(),
                   SizedBox(height: 24.h),
@@ -188,71 +188,57 @@ class _CategoryBar extends ConsumerWidget {
     final selectedDistrict = ref.watch(selectedDistrictProvider);
 
     return districtsAsync.when(
-      data:
-          (districts) => SizedBox(
-            height: 38.h,
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              scrollDirection: Axis.horizontal,
-              itemCount: districts.length,
-              separatorBuilder: (context, index) => SizedBox(width: 12.w),
-              itemBuilder: (context, index) {
-                final district = districts[index];
-                final isSelected = district.id == selectedDistrict;
-                return GestureDetector(
-                  onTap: () {
-                    ref
-                        .read(selectedDistrictProvider.notifier)
-                        .update(district.id);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(
-                        color:
-                            isSelected
-                                ? AppColors.primary
-                                : AppColors.border.withValues(alpha: 0.5),
-                      ),
-                      boxShadow:
-                          isSelected
-                              ? [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ]
-                              : null,
-                    ),
-                    child: Text(
-                      district.name,
-                      style: TextStyle(
-                        color:
-                            isSelected ? Colors.white : AppColors.textSecondary,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.w500,
-                        fontSize: 13.sp,
-                      ),
+      data: (districts) {
+        if (districts.isEmpty) return const SizedBox.shrink();
+
+        return SizedBox(
+          height: 36.h,
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            itemCount: districts.length,
+            separatorBuilder: (context, index) => SizedBox(width: 8.w),
+            itemBuilder: (context, index) {
+              final district = districts[index];
+              final isSelected = district.id == selectedDistrict;
+
+              return GestureDetector(
+                onTap: () {
+                  ref
+                      .read(selectedDistrictProvider.notifier)
+                      .update(district.id);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : AppColors.surface,
+                    borderRadius: BorderRadius.circular(18.r),
+                  ),
+                  child: Text(
+                    district.name,
+                    style: TextStyle(
+                      color:
+                          isSelected ? Colors.white : AppColors.textSecondary,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w500,
+                      fontSize: 12.sp,
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
+        );
+      },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
 
-class _FeaturedBannerSection extends ConsumerWidget {
-  const _FeaturedBannerSection();
+class _FestivalSection extends ConsumerWidget {
+  const _FestivalSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -262,18 +248,35 @@ class _FeaturedBannerSection extends ConsumerWidget {
       data: (festivals) {
         if (festivals.isEmpty) return const SizedBox.shrink();
 
-        return SizedBox(
-          height: 200.h,
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            scrollDirection: Axis.horizontal,
-            itemCount: festivals.length,
-            separatorBuilder: (context, index) => SizedBox(width: 16.w),
-            itemBuilder: (context, index) {
-              final festival = festivals[index];
-              return _FestivalCard(festival: festival);
-            },
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Text(
+                'festivals'.tr(),
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            SizedBox(
+              height: 180.h,
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                scrollDirection: Axis.horizontal,
+                itemCount: festivals.length,
+                separatorBuilder: (context, index) => SizedBox(width: 16.w),
+                itemBuilder: (context, index) {
+                  final festival = festivals[index];
+                  return _FestivalCard(festival: festival);
+                },
+              ),
+            ),
+          ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -299,23 +302,30 @@ class _FestivalCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: 160.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.r),
-          color: AppColors.surface,
-          border: Border.all(color: AppColors.border.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        width: 240.w,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.r)),
+        child: Stack(
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(14.r)),
-                child: AppNetworkImage(
-                  url: festival.photoUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  fallbackIcon: Icons.festival,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: AppNetworkImage(
+                url: festival.photoUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                fallbackIcon: Icons.festival,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.6),
+                  ],
                 ),
               ),
             ),
@@ -323,23 +333,24 @@ class _FestivalCard extends StatelessWidget {
               padding: EdgeInsets.all(12.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     festival.name,
                     style: TextStyle(
-                      fontSize: 13.sp,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: Colors.white,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 2.h),
                   Text(
                     DateFormat('MMM dd, yyyy').format(festival.startDate),
                     style: TextStyle(
-                      fontSize: 10.sp,
-                      color: AppColors.textSecondary,
+                      fontSize: 9.sp,
+                      color: Colors.white.withValues(alpha: 0.8),
                     ),
                   ),
                 ],
@@ -401,19 +412,21 @@ class _TempleNearBySection extends ConsumerWidget {
           data: (temples) {
             if (temples.isEmpty) {
               return Container(
-                height: 200.h,
+                padding: EdgeInsets.symmetric(vertical: 40.h),
                 alignment: Alignment.center,
                 child: Text('no_temples_found'.tr()),
               );
             }
-            return ListView.builder(
+            return ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               itemCount: temples.length,
+              separatorBuilder: (context, index) => SizedBox(height: 16.h),
               itemBuilder: (context, index) {
                 final temple = temples[index];
-                return GestureDetector(
+                return TempleCard(
+                  location: temple,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -423,10 +436,6 @@ class _TempleNearBySection extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: NearbyItemCard(location: temple),
-                  ),
                 );
               },
             );

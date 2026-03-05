@@ -5,7 +5,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
-import '../../../home/presentation/widgets/nearby_temple_tile.dart';
+import '../../../home/presentation/widgets/temple_card.dart';
+import '../../../temple_details/presentation/pages/temple_details_page.dart';
+import '../../../auth/presentation/providers/user_provider.dart';
 
 class DeityDetailsPage extends ConsumerWidget {
   final DeityModel deity;
@@ -14,14 +16,17 @@ class DeityDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userLocationAsync = ref.watch(userLocationProvider);
+    final userAsync = ref.watch(userProvider);
 
     return userLocationAsync.when(
       data: (userLocation) {
+        final user = userAsync.value;
         final templesAsync = ref.watch(
           templesByDeityProvider((
             deityId: deity.id,
-            lat: userLocation['lat']!,
-            lng: userLocation['lng']!,
+            lat: userLocation?['lat'],
+            lng: userLocation?['lng'],
+            district: user?.district,
           )),
         );
 
@@ -177,11 +182,18 @@ class DeityDetailsPage extends ConsumerWidget {
                     final temple = temples[index];
                     return Padding(
                       padding: EdgeInsets.only(bottom: 16.h),
-                      child: GestureDetector(
+                      child: TempleCard(
+                        location: temple,
                         onTap: () {
-                          // TODO: Navigate to temple details
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      TempleDetailsPage(templeId: temple.id),
+                            ),
+                          );
                         },
-                        child: NearbyTempleTile(location: temple),
                       ),
                     );
                   }, childCount: temples.length),

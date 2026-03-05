@@ -9,8 +9,11 @@ final nearbyAstrologersProvider = FutureProvider<List<AstrologerModel>>((
   final repository = ref.watch(astrologyRepositoryProvider);
   final location = await ref.watch(userLocationProvider.future);
 
-  return repository.getNearbyAstrologers(
-    lat: location['lat']!,
-    lng: location['lng']!,
-  );
+  if (location != null) {
+    return repository.getNearbyAstrologers(
+      lat: location['lat']!,
+      lng: location['lng']!,
+    );
+  }
+  return [];
 });

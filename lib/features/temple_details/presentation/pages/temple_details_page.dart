@@ -8,7 +8,7 @@ import '../../../favorites/presentation/providers/favorites_providers.dart';
 import '../../../favorites/data/favorites_repository.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../../home/presentation/widgets/nearby_item_card.dart';
-import '../../../home/presentation/widgets/nearby_temple_tile.dart';
+import '../../../home/presentation/widgets/temple_card.dart';
 
 class TempleDetailsPage extends ConsumerWidget {
   const TempleDetailsPage({super.key, required this.templeId});
@@ -395,6 +395,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
     } else if (widget.group == 3) {
       if (_selectedIndex == 0) {
         return _NearbyExploreList(
+          currentTempleId: widget.temple.id,
           lat: widget.temple.latitude,
           lng: widget.temple.longitude,
           category: 'TEMPLE',
@@ -406,6 +407,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
     } else if (widget.group == 4) {
       // Rental & Rooms -> Category RENTAL
       return _NearbyExploreList(
+        currentTempleId: widget.temple.id,
         lat: widget.temple.latitude,
         lng: widget.temple.longitude,
         category: 'RENTAL',
@@ -414,6 +416,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
     } else if (widget.group == 5) {
       // Hotel & Restaurants -> Category HOTEL
       return _NearbyExploreList(
+        currentTempleId: widget.temple.id,
         lat: widget.temple.latitude,
         lng: widget.temple.longitude,
         category: 'HOTEL',
@@ -620,12 +623,14 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
 }
 
 class _NearbyExploreList extends ConsumerWidget {
+  final String currentTempleId;
   final double lat;
   final double lng;
   final String category;
   final String emptyMessage;
 
   const _NearbyExploreList({
+    required this.currentTempleId,
     required this.lat,
     required this.lng,
     required this.category,
@@ -640,7 +645,10 @@ class _NearbyExploreList extends ConsumerWidget {
 
     return locationsAsync.when(
       data: (locations) {
-        if (locations.isEmpty) {
+        final filteredLocations =
+            locations.where((l) => l.id != currentTempleId).toList();
+
+        if (filteredLocations.isEmpty) {
           return Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 40.h),
@@ -655,12 +663,22 @@ class _NearbyExploreList extends ConsumerWidget {
         return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: locations.length,
+          itemCount: filteredLocations.length,
           separatorBuilder: (context, index) => SizedBox(height: 16.h),
           itemBuilder: (context, index) {
-            final loc = locations[index];
+            final loc = filteredLocations[index];
             if (category == 'TEMPLE') {
-              return NearbyTempleTile(location: loc);
+              return TempleCard(
+                location: loc,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TempleDetailsPage(templeId: loc.id),
+                    ),
+                  );
+                },
+              );
             }
             return NearbyItemCard(location: loc);
           },

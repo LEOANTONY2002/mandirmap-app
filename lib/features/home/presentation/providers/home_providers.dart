@@ -3,28 +3,29 @@ import '../../data/models/location_model.dart';
 import '../../data/repositories/home_repository.dart';
 
 import 'package:geolocator/geolocator.dart';
+import '../../../auth/presentation/providers/user_provider.dart';
 
 // Current user location provider (FETCHING ACTUAL LOCATION)
-final userLocationProvider = FutureProvider<Map<String, double>>((ref) async {
+final userLocationProvider = FutureProvider<Map<String, double>?>((ref) async {
   bool serviceEnabled;
   LocationPermission permission;
 
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Default to Kannur if service is disabled
-    return {'lat': 11.8745, 'lng': 75.3704};
+    // No default here anymore, return null to trigger fallback
+    return null;
   }
 
   permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      return {'lat': 11.8745, 'lng': 75.3704};
+      return null;
     }
   }
 
   if (permission == LocationPermission.deniedForever) {
-    return {'lat': 11.8745, 'lng': 75.3704};
+    return null;
   }
 
   final position = await Geolocator.getCurrentPosition();
@@ -35,10 +36,22 @@ final nearbyTemplesProvider = FutureProvider<List<LocationModel>>((ref) async {
   final repository = ref.watch(homeRepositoryProvider);
   final location = await ref.watch(userLocationProvider.future);
 
-  return repository.getNearbyTemples(
-    lat: location['lat']!,
-    lng: location['lng']!,
-  );
+  if (location != null) {
+    return repository.getNearbyTemples(
+      lat: location['lat']!,
+      lng: location['lng']!,
+    );
+  } else {
+    // FALLBACK: Search by User's City (District) from profile
+    final user = await ref.watch(userProvider.future);
+    if (user?.district != null && user!.district!.isNotEmpty) {
+      return repository.getLocationsByCategory(
+        'TEMPLE',
+        district: user.district,
+      );
+    }
+    return [];
+  }
 });
 
 final deitiesProvider = FutureProvider<List<DeityModel>>((ref) async {
@@ -60,11 +73,29 @@ final selectedDistrictProvider =
 
 final districtsListProvider = FutureProvider<List<DistrictModel>>((ref) async {
   final repository = ref.watch(homeRepositoryProvider);
-  final districts = await repository.getDistricts();
+
+  // Filter by User's State from profile
+  final user = await ref.watch(userProvider.future);
+  final districts = await repository.getDistricts(state: user?.state);
 
   // Set default selection if none exists
   if (ref.read(selectedDistrictProvider) == null && districts.isNotEmpty) {
-    ref.read(selectedDistrictProvider.notifier).update(districts.first.id);
+    String defaultId = districts.first.id;
+    if (user?.district != null) {
+      try {
+        defaultId =
+            districts
+                .firstWhere(
+                  (d) => d.name.toLowerCase() == user!.district!.toLowerCase(),
+                )
+                .id;
+      } catch (_) {}
+    }
+    // Update selection. We use a microtask to ensure we don't trigger
+    // builds during the current computation.
+    Future.microtask(
+      () => ref.read(selectedDistrictProvider.notifier).update(defaultId),
+    );
   }
 
   return districts;
@@ -123,8 +154,21 @@ final nearbyLocationsProvider = FutureProvider.family<
 
 final templesByDeityProvider = FutureProvider.family<
   List<LocationModel>,
-  ({int deityId, double lat, double lng})
+  ({int deityId, double? lat, double? lng, String? district})
 >((ref, params) async {
   final repository = ref.watch(homeRepositoryProvider);
-  return repository.getTemplesByDeity(params.deityId, params.lat, params.lng);
+  if (params.lat != null && params.lng != null) {
+    return repository.getTemplesByDeity(
+      params.deityId,
+      params.lat!,
+      params.lng!,
+    );
+  } else if (params.district != null) {
+    return repository.getLocationsByCategory(
+      'TEMPLE',
+      district: params.district,
+      deityId: params.deityId,
+    );
+  }
+  return [];
 });

@@ -12,9 +12,12 @@ class HomeRepository {
 
   HomeRepository(this._dio);
 
-  Future<List<DistrictModel>> getDistricts() async {
+  Future<List<DistrictModel>> getDistricts({String? state}) async {
     try {
-      final response = await _dio.get('/locations/districts');
+      final response = await _dio.get(
+        '/locations/districts',
+        queryParameters: state != null ? {'state': state} : null,
+      );
       final List data = response.data;
       return data.map((json) => DistrictModel.fromJson(json)).toList();
     } catch (e) {
@@ -55,11 +58,18 @@ class HomeRepository {
     }
   }
 
-  Future<List<FestivalModel>> getFestivals({String? district}) async {
+  Future<List<FestivalModel>> getFestivals({
+    String? district,
+    String? state,
+  }) async {
     try {
+      final queryParams = <String, dynamic>{};
+      if (district != null) queryParams['district'] = district;
+      if (state != null) queryParams['state'] = state;
+
       final response = await _dio.get(
         '/locations/festivals',
-        queryParameters: district != null ? {'district': district} : null,
+        queryParameters: queryParams.isNotEmpty ? queryParams : null,
       );
       final List data = response.data;
       return data.map((json) => FestivalModel.fromJson(json)).toList();
@@ -105,11 +115,19 @@ class HomeRepository {
     }
   }
 
-  Future<List<LocationModel>> getLocationsByCategory(String category) async {
+  Future<List<LocationModel>> getLocationsByCategory(
+    String category, {
+    String? district,
+    int? deityId,
+  }) async {
     try {
+      final queryParams = <String, dynamic>{'category': category};
+      if (district != null) queryParams['district'] = district;
+      if (deityId != null) queryParams['deityId'] = deityId;
+
       final response = await _dio.get(
         '/locations',
-        queryParameters: {'category': category},
+        queryParameters: queryParams,
       );
       final List data = response.data;
       return data.map((json) => LocationModel.fromJson(json)).toList();

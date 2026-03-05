@@ -40,98 +40,86 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
 
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 20.h),
+      padding: EdgeInsets.fromLTRB(
+        20.w,
+        MediaQuery.of(context).padding.top + 10.h,
+        20.w,
+        16.h,
+      ),
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 44.r,
-                    height: 44.r,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image:
-                            (avatarUrl != null && avatarUrl.isNotEmpty)
-                                ? NetworkImage(avatarUrl) as ImageProvider
-                                : const NetworkImage(
-                                  'https://ui-avatars.com/api/?background=FF6B35&color=fff&name=User&size=100',
-                                ),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        width: 1,
-                      ),
-                    ),
+              Container(
+                width: 48.r,
+                height: 48.r,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image:
+                        (avatarUrl != null && avatarUrl.isNotEmpty)
+                            ? NetworkImage(avatarUrl) as ImageProvider
+                            : const NetworkImage(
+                              'https://ui-avatars.com/api/?background=FF6B35&color=fff&name=User&size=100',
+                            ),
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(width: 12.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'namaste'.tr(),
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        firstName,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-              Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.notifications_none_outlined,
-                      size: 26.sp,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  Positioned(
-                    top: 12.h,
-                    right: 12.w,
-                    child: Container(
-                      width: 8.r,
-                      height: 8.r,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'namaste'.tr(),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    Text(
+                      firstName,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.notifications_none_outlined,
+                  size: 26.sp,
+                  color: AppColors.textPrimary,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 20.h),
           Container(
-            height: 48.h,
+            height: 44.h,
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(
-                color: AppColors.border.withValues(alpha: 0.5),
-              ),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+              border: Border.all(color: const Color(0xFFEEEEEE)),
             ),
             child: Row(
               children: [
-                Icon(Icons.search, color: AppColors.textSecondary, size: 20.sp),
+                Icon(Icons.search, color: const Color(0xFFCCCCCC), size: 20.sp),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: TextField(
@@ -140,7 +128,7 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                     decoration: InputDecoration(
                       hintText: 'Search place or temples',
                       hintStyle: TextStyle(
-                        color: AppColors.textSecondary.withValues(alpha: 0.7),
+                        color: const Color(0xFFCCCCCC),
                         fontSize: 14.sp,
                       ),
                       border: InputBorder.none,
@@ -149,7 +137,11 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                     ),
                   ),
                 ),
-                Icon(Icons.mic_none, color: AppColors.primary, size: 20.sp),
+                Icon(
+                  Icons.mic_none,
+                  color: const Color(0xFFCCCCCC),
+                  size: 20.sp,
+                ),
               ],
             ),
           ),
