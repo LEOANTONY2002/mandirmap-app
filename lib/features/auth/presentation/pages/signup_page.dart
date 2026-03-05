@@ -34,7 +34,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   }
 
   Future<void> _signup() async {
-    print('Starting signup process...');
     FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) {
@@ -51,6 +50,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       return;
     }
 
+    print('[Signup] Sending request to server...');
+    print('[Signup] Name: ${_nameController.text.trim()}');
+    print('[Signup] Email: ${_emailController.text.trim()}');
+    print('[Signup] State: $_selectedState, District: $_selectedCity');
+
     try {
       await ref
           .read(authControllerProvider.notifier)
@@ -62,30 +66,51 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             stateAttr: _selectedState!,
             district: _selectedCity!,
           );
+      print('[Signup] Success!');
     } catch (e) {
-      print('Signup error: $e');
+      print('[Signup] Error caught: $e');
       if (mounted) {
-        showDialog(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: const Text('Registration Failed'),
-                content: Text(e.toString().replaceAll('Exception: ', '')),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
+        _showErrorDialog(
+          'Registration Failed',
+          e.toString().replaceAll('Exception: ', ''),
         );
       }
     }
   }
 
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
+
+    // Listen for errors from the auth state and always show a dialog
+    ref.listen<AsyncValue<void>>(authControllerProvider, (_, next) {
+      if (next is AsyncError) {
+        print('[Signup] AsyncError from provider: ${next.error}');
+        if (mounted) {
+          _showErrorDialog(
+            'Registration Failed',
+            next.error.toString().replaceAll('Exception: ', ''),
+          );
+        }
+      }
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -31,7 +31,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _login() async {
-    // Dismiss keyboard
     FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) {
@@ -41,31 +40,55 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
+    print('[Login] Attempting login for $email');
+
     try {
       await ref.read(authControllerProvider.notifier).login(email, password);
+      print('[Login] Success!');
     } catch (e) {
+      print('[Login] Error caught: $e');
       if (mounted) {
-        showDialog(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: const Text('Authentication Failed'),
-                content: Text(e.toString().replaceAll('Exception: ', '')),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
+        _showErrorDialog(
+          'Authentication Failed',
+          e.toString().replaceAll('Exception: ', ''),
         );
       }
     }
   }
 
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
+
+    // Always surface errors via dialog (even if exception was swallowed)
+    ref.listen<AsyncValue<void>>(authControllerProvider, (_, next) {
+      if (next is AsyncError) {
+        print('[Login] AsyncError from provider: ${next.error}');
+        if (mounted) {
+          _showErrorDialog(
+            'Authentication Failed',
+            next.error.toString().replaceAll('Exception: ', ''),
+          );
+        }
+      }
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -6,10 +6,12 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/location_model.dart';
 import '../../../festival/presentation/pages/festival_details_page.dart';
 import '../../../temple_details/presentation/pages/temple_details_page.dart';
+import '../../../hotel_details/presentation/pages/hotel_details_page.dart';
 import 'nearby_temples_page.dart';
 import '../providers/home_providers.dart';
 import '../widgets/home_header.dart';
 import '../widgets/deity_list.dart';
+import '../widgets/nearby_item_card.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -74,13 +76,33 @@ class _SearchResultsSection extends ConsumerWidget {
             final result = results[index];
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => TempleDetailsPage(templeId: result.id),
-                  ),
-                );
+                if (result.category == 'TEMPLE') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => TempleDetailsPage(templeId: result.id),
+                    ),
+                  );
+                } else if (result.category == 'HOTEL' ||
+                    result.category == 'RENTAL') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => HotelDetailsPage(hotelId: result.id),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '${result.category} detail page coming soon!',
+                      ),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 12.h),
@@ -376,7 +398,11 @@ class _TempleNearBySection extends ConsumerWidget {
         nearbyTemples.when(
           data: (temples) {
             if (temples.isEmpty) {
-              return Center(child: Text('no_temples_found'.tr()));
+              return Container(
+                height: 200.h,
+                alignment: Alignment.center,
+                child: Text('no_temples_found'.tr()),
+              );
             }
             return ListView.builder(
               shrinkWrap: true,
@@ -395,96 +421,9 @@ class _TempleNearBySection extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 16.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.r),
-                      border: Border.all(
-                        color: AppColors.border.withValues(alpha: 0.5),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(15.r),
-                          ),
-                          child: Stack(
-                            children: [
-                              Image.network(
-                                temple.photos.isNotEmpty
-                                    ? temple.photos.first
-                                    : 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&q=80',
-                                height: 160.h,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                              Positioned(
-                                top: 12.h,
-                                right: 12.w,
-                                child: Container(
-                                  padding: EdgeInsets.all(8.r),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.favorite_border,
-                                    size: 18.sp,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                temple.name,
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                              SizedBox(height: 4.h),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on_outlined,
-                                    size: 14.sp,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Expanded(
-                                    child: Text(
-                                      '${temple.addressText} | ${(temple.distance! / 1000).toStringAsFixed(1)} km',
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: NearbyItemCard(location: temple),
                   ),
                 );
               },

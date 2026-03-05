@@ -25,20 +25,22 @@ class AstrologerModel {
 
   factory AstrologerModel.fromJson(Map<String, dynamic> json) {
     return AstrologerModel(
-      id: json['id'],
-      name: json['name'],
-      experienceYears: json['experienceYears'] ?? 0,
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      experienceYears: (json['experienceYears'] as num?)?.toInt() ?? 0,
       languages:
-          json['languages'] != null ? List<String>.from(json['languages']) : [],
-      hourlyRate: (json['hourlyRate'] as num).toDouble(),
-      bio: json['bio'],
-      rating: (json['rating'] as num).toDouble(),
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      distance:
-          json['distance'] != null
-              ? (json['distance'] as num).toDouble()
-              : null,
+          json['languages'] is List
+              ? (json['languages'] as List).map((e) => e.toString()).toList()
+              : <String>[],
+      hourlyRate:
+          json['hourlyRate'] is num
+              ? (json['hourlyRate'] as num).toDouble()
+              : double.tryParse(json['hourlyRate']?.toString() ?? '0') ?? 0.0,
+      bio: json['bio']?.toString(),
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      distance: (json['distance'] as num?)?.toDouble(),
     );
   }
 }

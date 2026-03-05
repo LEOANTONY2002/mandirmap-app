@@ -41,27 +41,37 @@ class LocationModel {
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      id: json['id'],
-      name: json['name'],
-      category: json['category'],
-      description: json['description'],
-      addressText: json['addressText'],
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      averageRating: (json['averageRating'] as num).toDouble(),
-      totalRatings: json['totalRatings'] as int,
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      category: json['category']?.toString() ?? '',
+      description: json['description']?.toString(),
+      addressText: json['addressText']?.toString() ?? '',
+      latitude: double.tryParse(json['latitude']?.toString() ?? '0') ?? 0.0,
+      longitude: double.tryParse(json['longitude']?.toString() ?? '0') ?? 0.0,
+      averageRating:
+          double.tryParse(json['averageRating']?.toString() ?? '0') ?? 0.0,
+      totalRatings: int.tryParse(json['totalRatings']?.toString() ?? '0') ?? 0,
       distance:
           json['distance'] != null
-              ? (json['distance'] as num).toDouble()
+              ? double.tryParse(json['distance'].toString())
               : null,
       photos:
-          json['media'] != null
-              ? (json['media'] as List).map((m) => m['url'].toString()).toList()
+          json['media'] is List
+              ? (json['media'] as List)
+                  .map(
+                    (m) =>
+                        m is Map && m['url'] != null
+                            ? m['url'].toString()
+                            : null,
+                  )
+                  .where((url) => url != null)
+                  .cast<String>()
+                  .toList()
               : <String>[],
-      district: json['district'],
-      districtMl: json['districtMl'],
-      state: json['state'],
-      stateMl: json['stateMl'],
+      district: json['district']?.toString(),
+      districtMl: json['districtMl']?.toString(),
+      state: json['state']?.toString(),
+      stateMl: json['stateMl']?.toString(),
       temple:
           json['temple'] != null ? TempleModel.fromJson(json['temple']) : null,
       hotel: json['hotel'] != null ? HotelModel.fromJson(json['hotel']) : null,
@@ -88,12 +98,13 @@ class HotelModel {
 
   factory HotelModel.fromJson(Map<String, dynamic> json) {
     return HotelModel(
-      pricePerDay: (json['pricePerDay'] as num).toDouble(),
-      contactPhone: json['contactPhone'],
-      whatsapp: json['whatsapp'],
+      pricePerDay:
+          double.tryParse(json['pricePerDay']?.toString() ?? '0') ?? 0.0,
+      contactPhone: json['contactPhone']?.toString(),
+      whatsapp: json['whatsapp']?.toString(),
       amenities:
-          json['amenities'] != null
-              ? List<String>.from(json['amenities'])
+          json['amenities'] is List
+              ? (json['amenities'] as List).map((e) => e.toString()).toList()
               : <String>[],
     );
   }
@@ -107,10 +118,10 @@ class RestaurantModel {
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
     return RestaurantModel(
-      isPureVeg: json['isPureVeg'] ?? true,
+      isPureVeg: json['isPureVeg']?.toString().toLowerCase() == 'true',
       menuItems:
-          json['menuItems'] != null
-              ? List<String>.from(json['menuItems'])
+          json['menuItems'] is List
+              ? (json['menuItems'] as List).map((e) => e.toString()).toList()
               : <String>[],
     );
   }
@@ -133,14 +144,14 @@ class TempleModel {
 
   factory TempleModel.fromJson(Map<String, dynamic> json) {
     return TempleModel(
-      history: json['history'],
-      openTime: json['openTime'],
-      closeTime: json['closeTime'],
-      vazhipaduData: json['vazhipaduData'],
+      history: json['history']?.toString(),
+      openTime: json['openTime']?.toString(),
+      closeTime: json['closeTime']?.toString(),
+      vazhipaduData: json['vazhipaduData'], // Keep dynamic
       deities:
-          json['deities'] != null
+          json['deities'] is List
               ? (json['deities'] as List)
-                  .where((i) => i['deity'] != null)
+                  .where((i) => i is Map && i['deity'] != null)
                   .map<DeityModel>((i) => DeityModel.fromJson(i['deity']))
                   .toList()
               : <DeityModel>[],
@@ -157,9 +168,9 @@ class DeityModel {
 
   factory DeityModel.fromJson(Map<String, dynamic> json) {
     return DeityModel(
-      id: json['id'],
-      name: json['name'],
-      photoUrl: json['photoUrl'],
+      id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      name: json['name']?.toString() ?? '',
+      photoUrl: json['photoUrl']?.toString(),
     );
   }
 }
@@ -185,13 +196,20 @@ class FestivalModel {
 
   factory FestivalModel.fromJson(Map<String, dynamic> json) {
     return FestivalModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      photoUrl: json['photoUrl'],
-      locationId: json['locationId'],
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      description: json['description']?.toString(),
+      startDate:
+          json['startDate'] != null
+              ? DateTime.tryParse(json['startDate'].toString()) ??
+                  DateTime.now()
+              : DateTime.now(),
+      endDate:
+          json['endDate'] != null
+              ? DateTime.tryParse(json['endDate'].toString()) ?? DateTime.now()
+              : DateTime.now(),
+      photoUrl: json['photoUrl']?.toString(),
+      locationId: json['locationId']?.toString(),
     );
   }
 }

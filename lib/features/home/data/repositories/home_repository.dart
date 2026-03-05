@@ -30,7 +30,12 @@ class HomeRepository {
     try {
       final response = await _dio.get(
         '/locations/nearby',
-        queryParameters: {'lat': lat, 'lng': lng, 'radius': radius},
+        queryParameters: {
+          'lat': lat,
+          'lng': lng,
+          'radius': radius,
+          'category': 'TEMPLE',
+        },
       );
 
       final List data = response.data;
@@ -76,6 +81,30 @@ class HomeRepository {
     }
   }
 
+  Future<List<LocationModel>> getNearbyLocations({
+    required double lat,
+    required double lng,
+    required String category,
+    double radius = 10000,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/locations/nearby',
+        queryParameters: {
+          'lat': lat,
+          'lng': lng,
+          'radius': radius,
+          'category': category,
+        },
+      );
+
+      final List data = response.data;
+      return data.map((json) => LocationModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<LocationModel>> getLocationsByCategory(String category) async {
     try {
       final response = await _dio.get(
@@ -84,6 +113,38 @@ class HomeRepository {
       );
       final List data = response.data;
       return data.map((json) => LocationModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<LocationModel>> getTemplesByDeity(
+    int deityId,
+    double lat,
+    double lng,
+  ) async {
+    try {
+      final response = await _dio.get(
+        '/locations/nearby',
+        queryParameters: {
+          'lat': lat,
+          'lng': lng,
+          'radius': 50000, // 50km radius
+          'category': 'TEMPLE',
+          'deityId': deityId,
+        },
+      );
+      final List data = response.data;
+      return data.map((json) => LocationModel.fromJson(json)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<LocationModel> getLocationDetails(String id) async {
+    try {
+      final response = await _dio.get('/locations/$id');
+      return LocationModel.fromJson(response.data);
     } catch (e) {
       rethrow;
     }
@@ -97,6 +158,9 @@ class DistrictModel {
   DistrictModel({required this.id, required this.name});
 
   factory DistrictModel.fromJson(Map<String, dynamic> json) {
-    return DistrictModel(id: json['id'], name: json['name']);
+    return DistrictModel(
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+    );
   }
 }

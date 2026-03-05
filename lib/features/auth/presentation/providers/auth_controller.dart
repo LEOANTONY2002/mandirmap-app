@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/auth_repository.dart';
 import 'auth_state_provider.dart';
+import 'user_provider.dart';
 
 final authControllerProvider =
     NotifierProvider<AuthController, AsyncValue<void>>(() {
@@ -19,8 +20,10 @@ class AuthController extends Notifier<AsyncValue<void>> {
       final repository = ref.read(authRepositoryProvider);
       await repository.login(email: email, password: password);
 
-      // Update state
+      // Update state and refresh user profile
       ref.read(authStateProvider.notifier).login();
+      ref.invalidate(userProvider);
+      state = const AsyncData(null); // Reset loading state
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;
@@ -48,8 +51,10 @@ class AuthController extends Notifier<AsyncValue<void>> {
             district: district,
           );
 
-      // Update state
+      // Update state and refresh user profile
       ref.read(authStateProvider.notifier).login();
+      ref.invalidate(userProvider);
+      state = const AsyncData(null); // Reset loading state
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;
@@ -61,6 +66,7 @@ class AuthController extends Notifier<AsyncValue<void>> {
     try {
       await ref.read(authRepositoryProvider).signOut();
       ref.read(authStateProvider.notifier).logout();
+      state = const AsyncData(null); // Reset so login page button is re-enabled
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

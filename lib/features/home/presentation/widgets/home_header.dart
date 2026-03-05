@@ -1,15 +1,43 @@
+import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../auth/presentation/providers/user_provider.dart';
 import '../providers/home_providers.dart';
 
-class HomeHeader extends ConsumerWidget {
+class HomeHeader extends ConsumerStatefulWidget {
   const HomeHeader({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends ConsumerState<HomeHeader> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref.read(searchQueryProvider.notifier).update(value);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userAsync = ref.watch(userProvider);
+    final user = userAsync.valueOrNull;
+    final displayName = user?.fullName ?? 'Guest';
+    final firstName = displayName.split(' ').first;
+    final avatarUrl = user?.avatarUrl;
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 20.h),
@@ -25,10 +53,13 @@ class HomeHeader extends ConsumerWidget {
                     height: 44.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80',
-                        ),
+                      image: DecorationImage(
+                        image:
+                            (avatarUrl != null && avatarUrl.isNotEmpty)
+                                ? NetworkImage(avatarUrl) as ImageProvider
+                                : const NetworkImage(
+                                  'https://ui-avatars.com/api/?background=FF6B35&color=fff&name=User&size=100',
+                                ),
                         fit: BoxFit.cover,
                       ),
                       border: Border.all(
@@ -50,7 +81,7 @@ class HomeHeader extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        'Vineeth MP',
+                        firstName,
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
@@ -104,9 +135,7 @@ class HomeHeader extends ConsumerWidget {
                 SizedBox(width: 12.w),
                 Expanded(
                   child: TextField(
-                    onChanged: (value) {
-                      ref.read(searchQueryProvider.notifier).update(value);
-                    },
+                    onChanged: _onSearchChanged,
                     style: TextStyle(fontSize: 14.sp),
                     decoration: InputDecoration(
                       hintText: 'Search place or temples',

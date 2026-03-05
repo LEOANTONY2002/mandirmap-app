@@ -108,3 +108,23 @@ final restaurantsProvider = FutureProvider<List<LocationModel>>((ref) async {
   final repository = ref.watch(homeRepositoryProvider);
   return repository.getLocationsByCategory('RESTAURANT');
 });
+
+final nearbyLocationsProvider = FutureProvider.family<
+  List<LocationModel>,
+  ({double lat, double lng, String category})
+>((ref, params) async {
+  final repository = ref.watch(homeRepositoryProvider);
+  return repository.getNearbyLocations(
+    lat: params.lat,
+    lng: params.lng,
+    category: params.category,
+  );
+});
+
+final templesByDeityProvider = FutureProvider.family<
+  List<LocationModel>,
+  ({int deityId, double lat, double lng})
+>((ref, params) async {
+  final repository = ref.watch(homeRepositoryProvider);
+  return repository.getTemplesByDeity(params.deityId, params.lat, params.lng);
+});

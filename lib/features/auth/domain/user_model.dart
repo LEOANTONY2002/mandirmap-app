@@ -27,17 +27,18 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      fullName: json['full_name'] ?? json['fullName'],
-      email: json['email'],
-      phoneNumber: json['phone_number'] ?? json['phoneNumber'],
-      avatarUrl: json['avatar_url'] ?? json['avatarUrl'],
-      language: json['language'] ?? 'ENGLISH',
-      address1: json['address_1'] ?? json['address1'],
-      address2: json['address_2'] ?? json['address2'],
-      address3: json['address_3'] ?? json['address3'],
-      district: json['district'],
-      state: json['state'],
+      id: json['id']?.toString() ?? '',
+      fullName: (json['full_name'] ?? json['fullName'])?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      phoneNumber:
+          (json['phone_number'] ?? json['phoneNumber'])?.toString() ?? '',
+      avatarUrl: (json['avatar_url'] ?? json['avatarUrl'])?.toString(),
+      language: json['language']?.toString() ?? 'ENGLISH',
+      address1: (json['address_1'] ?? json['address1'])?.toString(),
+      address2: (json['address_2'] ?? json['address2'])?.toString(),
+      address3: (json['address_3'] ?? json['address3'])?.toString(),
+      district: json['district']?.toString(),
+      state: json['state']?.toString(),
     );
   }
 }

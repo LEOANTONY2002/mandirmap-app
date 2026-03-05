@@ -5,6 +5,9 @@ import '../../../../core/theme/app_colors.dart';
 import '../providers/temple_providers.dart';
 import '../../../favorites/presentation/providers/favorites_providers.dart';
 import '../../../favorites/data/favorites_repository.dart';
+import '../../../home/presentation/providers/home_providers.dart';
+import '../../../home/presentation/widgets/nearby_item_card.dart';
+import '../../../home/presentation/widgets/nearby_temple_tile.dart';
 
 class TempleDetailsPage extends ConsumerWidget {
   const TempleDetailsPage({super.key, required this.templeId});
@@ -317,30 +320,30 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
       1 => ['Worship Timing', 'Vazhipadu Details'],
       2 => ['Photos', 'Videos'],
       3 => ['Nearby Temples', 'Community'],
-      4 => ['Rental', 'Rooms'],
-      5 => ['Hotels', 'Restaurants'],
       6 => ['Travel', 'Booking'],
       7 => ['Bus Times', 'Train Times'],
-      _ => ['Details', 'More'],
+      _ => <String>[], // No tabs for Rental (4) and Hotel (5) anymore
     };
 
     return Column(
       children: [
-        Container(
-          height: 48.h,
-          padding: EdgeInsets.all(4.w),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF5F5F5),
-            borderRadius: BorderRadius.circular(12.r),
+        if (tabs.isNotEmpty) ...[
+          Container(
+            height: 48.h,
+            padding: EdgeInsets.all(4.w),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Row(
+              children: [
+                Expanded(child: _buildSegmentButton(tabs[0], 0)),
+                Expanded(child: _buildSegmentButton(tabs[1], 1)),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              Expanded(child: _buildSegmentButton(tabs[0], 0)),
-              Expanded(child: _buildSegmentButton(tabs[1], 1)),
-            ],
-          ),
-        ),
-        SizedBox(height: 20.h),
+          SizedBox(height: 20.h),
+        ],
         _buildContent(),
       ],
     );
@@ -385,63 +388,33 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
       return _selectedIndex == 0 ? _buildTiming() : _buildVazhipadu();
     } else if (widget.group == 2) {
       return _selectedIndex == 0 ? _buildPhotos() : _buildVideos();
-    } else if (widget.group == 4 || widget.group == 5) {
-      // Rental/Rooms and Hotel/Restaurants
-      final hotel = widget.temple.hotel;
-      final restaurant = widget.temple.restaurant;
-
+    } else if (widget.group == 3) {
       if (_selectedIndex == 0) {
-        // First tab: Rental or Hotel
-        if (hotel == null) {
-          return const Center(child: Text('No information available'));
-        }
-        return Column(
-          children: [
-            _buildInfoRow(
-              Icons.payments_outlined,
-              'Price per Day',
-              '₹${hotel.pricePerDay}',
-            ),
-            if (hotel.amenities.isNotEmpty) ...[
-              SizedBox(height: 20.h),
-              Text(
-                'Amenities',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
-              ),
-              SizedBox(height: 10.h),
-              Wrap(
-                spacing: 8.w,
-                children:
-                    hotel.amenities.map((a) => Chip(label: Text(a))).toList(),
-              ),
-            ],
-          ],
+        return _NearbyExploreList(
+          lat: widget.temple.latitude,
+          lng: widget.temple.longitude,
+          category: 'TEMPLE',
+          emptyMessage: 'No other temples found nearby',
         );
       } else {
-        // Second tab: Rooms or Restaurants
-        if (restaurant == null) {
-          return const Center(child: Text('No information available'));
-        }
-        return Column(
-          children: [
-            _buildInfoRow(
-              restaurant.isPureVeg ? Icons.eco : Icons.kebab_dining,
-              'Type',
-              restaurant.isPureVeg ? 'Pure Veg' : 'Veg & Non-Veg',
-            ),
-            if (restaurant.menuItems.isNotEmpty) ...[
-              SizedBox(height: 20.h),
-              Text(
-                'Special Menus',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
-              ),
-              ...restaurant.menuItems.map(
-                (m) => ListTile(title: Text(m), dense: true),
-              ),
-            ],
-          ],
-        );
+        return const Center(child: Text('Community features are coming soon.'));
       }
+    } else if (widget.group == 4) {
+      // Rental & Rooms -> Category RENTAL
+      return _NearbyExploreList(
+        lat: widget.temple.latitude,
+        lng: widget.temple.longitude,
+        category: 'RENTAL',
+        emptyMessage: 'No rentals or rooms found nearby',
+      );
+    } else if (widget.group == 5) {
+      // Hotel & Restaurants -> Category HOTEL
+      return _NearbyExploreList(
+        lat: widget.temple.latitude,
+        lng: widget.temple.longitude,
+        category: 'HOTEL',
+        emptyMessage: 'No hotels found nearby',
+      );
     } else {
       return const Center(child: Text('Coming Soon'));
     }
@@ -635,5 +608,58 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
 
   Widget _buildVideos() {
     return const Center(child: Text('No videos available yet'));
+  }
+}
+
+class _NearbyExploreList extends ConsumerWidget {
+  final double lat;
+  final double lng;
+  final String category;
+  final String emptyMessage;
+
+  const _NearbyExploreList({
+    required this.lat,
+    required this.lng,
+    required this.category,
+    required this.emptyMessage,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locationsAsync = ref.watch(
+      nearbyLocationsProvider((lat: lat, lng: lng, category: category)),
+    );
+
+    return locationsAsync.when(
+      data: (locations) {
+        if (locations.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.h),
+              child: Text(
+                emptyMessage,
+                style: TextStyle(color: AppColors.textSecondary),
+              ),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: locations.length,
+          separatorBuilder: (context, index) => SizedBox(height: 16.h),
+          itemBuilder: (context, index) {
+            final loc = locations[index];
+            if (category == 'TEMPLE') {
+              return NearbyTempleTile(location: loc);
+            }
+            return NearbyItemCard(location: loc);
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Error: $e')),
+    );
   }
 }

@@ -55,6 +55,7 @@ dependencies:
   csc_picker_plus: ^0.0.3
   flutter_secure_storage: ^10.0.0
   email_validator: ^3.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

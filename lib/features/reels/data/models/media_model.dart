@@ -23,15 +23,22 @@ class MediaModel {
 
   factory MediaModel.fromJson(Map<String, dynamic> json) {
     return MediaModel(
-      id: json['id'],
-      url: json['url'],
-      thumbnailUrl: json['thumbnailUrl'],
-      type: json['type'],
-      likes: json['likes'] ?? 0,
-      userName: json['user']?['fullName'],
-      userAvatar: json['user']?['avatarUrl'],
-      locationName: json['location']?['name'],
-      createdAt: DateTime.parse(json['createdAt']),
+      id: json['id']?.toString() ?? '',
+      url: json['url']?.toString() ?? '',
+      thumbnailUrl: json['thumbnailUrl']?.toString(),
+      type: json['type']?.toString() ?? 'IMAGE',
+      likes: (json['likes'] as num?)?.toInt() ?? 0,
+      userName: json['user']?['fullName']?.toString() ?? 'Anonymous',
+      userAvatar: json['user']?['avatarUrl']?.toString(),
+      locationName: json['location']?['name']?.toString(),
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'].toString()) ??
+                  DateTime.now()
+              : (json['createdAt'] != null
+                  ? DateTime.tryParse(json['createdAt'].toString()) ??
+                      DateTime.now()
+                  : DateTime.now()),
     );
   }
 }
