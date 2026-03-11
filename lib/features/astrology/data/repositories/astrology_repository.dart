@@ -13,16 +13,32 @@ class AstrologyRepository {
   AstrologyRepository(this._dio);
 
   Future<List<AstrologerModel>> getNearbyAstrologers({
-    required double lat,
-    required double lng,
+    double? lat,
+    double? lng,
+    String? district,
     double radius = 20000,
   }) async {
     try {
       final response = await _dio.get(
         '/astrologers/nearby',
-        queryParameters: {'lat': lat, 'lng': lng, 'radius': radius},
+        queryParameters: {
+          if (lat != null) 'lat': lat,
+          if (lng != null) 'lng': lng,
+          if (district != null) 'district': district,
+          'radius': radius,
+        },
       );
 
+      final List data = response.data;
+      return data.map((json) => AstrologerModel.fromJson(json)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<AstrologerModel>> getAstrologers() async {
+    try {
+      final response = await _dio.get('/astrologers');
       final List data = response.data;
       return data.map((json) => AstrologerModel.fromJson(json)).toList();
     } catch (e) {
