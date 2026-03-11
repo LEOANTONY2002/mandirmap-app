@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:csc_picker_plus/csc_picker_plus.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/user_model.dart';
 import '../../domain/profile_repository.dart';
@@ -27,6 +30,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   String? _selectedState;
   String? _selectedCity;
   bool _isLoading = false;
+  File? _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -52,11 +57,32 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     super.dispose();
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   Future<void> _updateProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
     try {
+      // 1. Upload avatar if changed
+      if (_imageFile != null) {
+        await ref
+            .read(profileRepositoryProvider)
+            .uploadAvatar(_imageFile!.path);
+      }
+
+      // 2. Update other details
       await ref.read(profileRepositoryProvider).updateProfile({
         'fullName': _nameController.text.trim(),
         'email': _emailController.text.trim(),
@@ -122,6 +148,71 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Profile Image Uploader
+              Center(
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 120.w,
+                      height: 120.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.primary, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child:
+                            _imageFile != null
+                                ? Image.file(_imageFile!, fit: BoxFit.cover)
+                                : widget.user.avatarUrl != null &&
+                                    widget.user.avatarUrl!.isNotEmpty
+                                ? CachedNetworkImage(
+                                  imageUrl: widget.user.avatarUrl!,
+                                  fit: BoxFit.cover,
+                                  placeholder:
+                                      (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                  errorWidget:
+                                      (context, url, error) =>
+                                          _buildDefaultAvatar(),
+                                )
+                                : _buildDefaultAvatar(),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: const BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 20.w,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 32.h),
+
               _buildLabel('Full Name'),
               _buildTextField(
                 controller: _nameController,
@@ -214,6 +305,17 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: AppColors.surface,
+      child: Icon(
+        Icons.person,
+        size: 60.w,
+        color: AppColors.primary.withOpacity(0.5),
       ),
     );
   }

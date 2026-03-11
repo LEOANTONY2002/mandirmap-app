@@ -68,5 +68,8 @@
   "already_have_account": "ഇതിനകം അക്കൗണ്ട് ഉണ്ടോ?",
   "enter_phone_number": "നിങ്ങളുടെ\nഫോൺ നമ്പർ നൽകുക",
   "verify_otp": "OTP സ്ഥിരീകരിക്കുക",
-  "resend_otp": "OTP വീണ്ടും അയയ്ക്കുക {}"
+  "resend_otp": "OTP വീണ്ടും അയയ്ക്കുക {}",
+  "home": "ഹോം",
+  "reels": "റീൽസ്",
+  "profile": "പ്രൊഫൈൽ"
 }

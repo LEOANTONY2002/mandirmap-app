@@ -71,5 +71,8 @@
   "already_have_account": "Already have an account?",
   "enter_phone_number": "Enter your\nPhone Number",
   "verify_otp": "Verify with OTP",
-  "resend_otp": "Resend OTP in {}"
+  "resend_otp": "Resend OTP in {}",
+  "home": "Home",
+  "reels": "Reels",
+  "profile": "Profile"
 }

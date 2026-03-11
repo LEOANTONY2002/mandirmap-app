@@ -1,6 +1,7 @@
 class AppConstants {
-  static const String apiBaseUrl =
-      'https://mandirmap-backend-production.up.railway.app';
+  // static const String apiBaseUrl =
+  //     'https://mandirmap-backend-production.up.railway.app';
+  static const String apiBaseUrl = 'https://few-gifts-divide.loca.lt';
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 

@@ -12,13 +12,24 @@ final userProvider = FutureProvider<UserModel?>((ref) async {
   try {
     final dio = ref.read(dioProvider);
     final response = await dio.get('/users/profile');
-    return UserModel.fromJson(response.data);
+    if (response.data == null) {
+      print('[UserProvider] API returned null data');
+      return null;
+    }
+    final user = UserModel.fromJson(response.data);
+    if (user.id.isEmpty) {
+      print('[UserProvider] User ID is empty in response');
+      return null;
+    }
+    return user;
   } on DioException catch (e) {
     if (e.response?.statusCode == 401) {
-      ref.read(authStateProvider.notifier).logout();
+      print('[UserProvider] 401 Unauthorized - logging out');
+      Future.microtask(() => ref.read(authStateProvider.notifier).logout());
     }
-    return null;
-  } catch (_) {
-    return null;
+    rethrow;
+  } catch (e) {
+    print('[UserProvider] Unexpected error: $e');
+    rethrow;
   }
 });

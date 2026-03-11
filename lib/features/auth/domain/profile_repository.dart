@@ -28,4 +28,17 @@ class ProfileRepository {
       rethrow;
     }
   }
+
+  Future<void> uploadAvatar(String filePath) async {
+    try {
+      final fileName = filePath.split('/').last;
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(filePath, filename: fileName),
+      });
+
+      await _dio.post('/users/avatar', data: formData);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
