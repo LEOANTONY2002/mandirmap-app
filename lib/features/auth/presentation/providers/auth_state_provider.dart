@@ -22,10 +22,12 @@ class AuthStateNotifier extends Notifier<bool> {
   }
 
   void login() {
+    print('[AuthState] Transitioning to LoggedIn state (true)');
     state = true;
   }
 
   Future<void> logout() async {
+    print('[AuthState] Transitioning to LoggedOut state (false)');
     await _secureStorage.delete(key: AppConstants.authTokenKey);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppConstants.isLoggedInKey, false);

@@ -20,10 +20,14 @@ class AuthController extends Notifier<AsyncValue<void>> {
       final repository = ref.read(authRepositoryProvider);
       await repository.login(email: email, password: password);
 
-      // Update state and refresh user profile
+      // 1. Reset controller state first so button is re-enabled if needed
+      state = const AsyncValue.data(null);
+
+      // 2. Trigger the global navigation via authStateProvider
       ref.read(authStateProvider.notifier).login();
+
+      // 3. Invalidate profile to fetch new data
       ref.invalidate(userProvider);
-      state = const AsyncData(null); // Reset loading state
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;
@@ -38,7 +42,7 @@ class AuthController extends Notifier<AsyncValue<void>> {
     required String stateAttr,
     required String district,
   }) async {
-    state = const AsyncLoading();
+    state = const AsyncValue.loading();
     try {
       await ref
           .read(authRepositoryProvider)
@@ -51,10 +55,14 @@ class AuthController extends Notifier<AsyncValue<void>> {
             district: district,
           );
 
-      // Update state and refresh user profile
+      // 1. Reset controller state first
+      state = const AsyncValue.data(null);
+
+      // 2. Trigger the global navigation
       ref.read(authStateProvider.notifier).login();
+
+      // 3. Invalidate profile
       ref.invalidate(userProvider);
-      state = const AsyncData(null); // Reset loading state
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       rethrow;

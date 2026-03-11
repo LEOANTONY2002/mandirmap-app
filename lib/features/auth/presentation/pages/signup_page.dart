@@ -55,6 +55,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     print('[Signup] Email: ${_emailController.text.trim()}');
     print('[Signup] State: $_selectedState, District: $_selectedCity');
 
+    print(
+      '[Signup] Step 1: Requesting registration for ${_emailController.text}',
+    );
     try {
       await ref
           .read(authControllerProvider.notifier)
@@ -66,9 +69,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             stateAttr: _selectedState!,
             district: _selectedCity!,
           );
-      print('[Signup] Success!');
-    } catch (e) {
-      print('[Signup] Error caught: $e');
+      print(
+        '[Signup] Step 2: Controller returned success. Navigation should trigger via state change.',
+      );
+    } catch (e, st) {
+      print('[Signup] Registration Error: $e');
       if (mounted) {
         _showErrorDialog(
           'Registration Failed',

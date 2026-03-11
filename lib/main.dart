@@ -43,6 +43,9 @@ class MandirMapApp extends ConsumerWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
+        print(
+          '[App] Rebuilding with isLoggedIn: $isLoggedIn, onboarding: $onboardingCompleted',
+        );
         Widget homeWidget;
         if (!onboardingCompleted) {
           homeWidget = const OnboardingPage();
@@ -53,6 +56,7 @@ class MandirMapApp extends ConsumerWidget {
         }
 
         return MaterialApp(
+          key: ValueKey('mm-app-$isLoggedIn-$onboardingCompleted'),
           title: 'app_name'.tr(),
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
