@@ -125,15 +125,19 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                   child: TextField(
                     onChanged: _onSearchChanged,
                     style: TextStyle(fontSize: 14.sp),
+                    cursorHeight: 20.h,
                     decoration: InputDecoration(
+                      fillColor: Colors.white,
                       hintText: 'Search place or temples',
                       hintStyle: TextStyle(
                         color: const Color(0xFFCCCCCC),
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                       ),
                       border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
+                      focusedBorder: InputBorder.none,
+                      hoverColor: Colors.transparent,
+                      contentPadding: EdgeInsets.symmetric(vertical: 14.h),
+                      focusColor: Colors.transparent,
                     ),
                   ),
                 ),

@@ -33,3 +33,9 @@ final nearbyAstrologersProvider = FutureProvider<List<AstrologerModel>>((
   print('[Astrology] Final fallback to everyone');
   return repository.getAstrologers();
 });
+
+final astrologerDetailsProvider =
+    FutureProvider.family<AstrologerModel, String>((ref, id) async {
+      final repository = ref.watch(astrologyRepositoryProvider);
+      return repository.getAstrologerDetails(id);
+    });

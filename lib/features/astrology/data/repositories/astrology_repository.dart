@@ -45,4 +45,54 @@ class AstrologyRepository {
       rethrow;
     }
   }
+
+  Future<AstrologerModel> getAstrologerDetails(String id) async {
+    try {
+      final response = await _dio.get('/astrologers/$id');
+      return AstrologerModel.fromJson(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> submitReview(String astrologerId, int rating, String? comment) async {
+    try {
+      await _dio.post(
+        '/astrologers/$astrologerId/reviews',
+        data: {
+          'rating': rating,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateReview(
+    String astrologerId,
+    String reviewId,
+    int rating,
+    String? comment,
+  ) async {
+    try {
+      await _dio.put(
+        '/astrologers/$astrologerId/reviews/$reviewId',
+        data: {
+          'rating': rating,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteReview(String astrologerId, String reviewId) async {
+    try {
+      await _dio.delete('/astrologers/$astrologerId/reviews/$reviewId');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

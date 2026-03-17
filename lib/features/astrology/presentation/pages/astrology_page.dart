@@ -5,7 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/astrology_providers.dart';
 import '../../data/models/astrologer_model.dart';
-import 'astrology_chat_page.dart';
+import 'astrologer_details_page.dart';
 
 class AstrologyPage extends ConsumerWidget {
   const AstrologyPage({super.key});
@@ -15,7 +15,23 @@ class AstrologyPage extends ConsumerWidget {
     final astrologersAsync = ref.watch(nearbyAstrologersProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Astrology',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -30,9 +46,8 @@ class AstrologyPage extends ConsumerWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      const AppNetworkImage(
-                        url:
-                            'https://images.unsplash.com/photo-1532073150508-0c1df023bdd5?w=800&q=80',
+                      Image.asset(
+                        'assets/images/Astrology.png',
                         fit: BoxFit.cover,
                       ),
                       Container(
@@ -42,20 +57,20 @@ class AstrologyPage extends ConsumerWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.black.withValues(alpha: 0.1),
-                              Colors.black.withValues(alpha: 0.6),
+                              Colors.black.withValues(alpha: 0.4),
                             ],
                           ),
                         ),
-                        child: Center(
-                          child: Text(
-                            'Talk to\nAstrologer',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28.sp,
-                              fontWeight: FontWeight.bold,
-                              height: 1.1,
-                            ),
+                      ),
+                      Center(
+                        child: Text(
+                          'Talk to\nAstrologer',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.bold,
+                            height: 1.1,
                           ),
                         ),
                       ),
@@ -69,16 +84,36 @@ class AstrologyPage extends ConsumerWidget {
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
               sliver: SliverToBoxAdapter(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search place or temples',
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.textSecondary,
-                    ),
-                    suffixIcon: const Icon(
-                      Icons.mic_none,
-                      color: AppColors.primary,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30.r),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search place or temples',
+                      hintStyle: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 14.sp,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppColors.primary,
+                      ),
+                      suffixIcon: const Icon(
+                        Icons.mic_none,
+                        color: AppColors.primary,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 15.h),
                     ),
                   ),
                 ),
@@ -90,11 +125,14 @@ class AstrologyPage extends ConsumerWidget {
               data: (astrologers) {
                 if (astrologers.isEmpty) {
                   return const SliverFillRemaining(
-                    child: Center(child: Text('No astrologers found nearby.')),
+                    child: Center(child: Text('No astrologers found.')),
                   );
                 }
                 return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 10.h,
+                  ),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final astrologer = astrologers[index];
@@ -105,7 +143,7 @@ class AstrologyPage extends ConsumerWidget {
                             MaterialPageRoute(
                               builder:
                                   (context) =>
-                                      AstrologyChatPage(astrologer: astrologer),
+                                      AstrologerDetailsPage(id: astrologer.id),
                             ),
                           );
                         },
@@ -139,129 +177,161 @@ class _AstrologerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 15.h),
-      padding: EdgeInsets.all(12.w),
+      margin: EdgeInsets.only(bottom: 20.h),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: const Color(0xFFF2F2F2)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          Stack(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipOval(
-                child: AppNetworkImage(
-                  url:
-                      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80',
-                  height: 60.r,
-                  width: 60.r,
-                  fit: BoxFit.cover,
-                  fallbackIcon: Icons.person,
-                ),
+              // Avatar & Rating
+              Column(
+                children: [
+                  Container(
+                    width: 70.r,
+                    height: 70.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: AppNetworkImage(
+                        url: astrologer.avatarUrl ?? '',
+                        fit: BoxFit.cover,
+                        fallbackIcon: Icons.person,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: AppColors.gold, size: 14.sp),
+                      SizedBox(width: 4.w),
+                      Text(
+                        astrologer.rating.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding: EdgeInsets.all(2.r),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.check_circle,
-                    color: Colors.blue,
-                    size: 14.sp,
-                  ),
+              SizedBox(width: 15.w),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            astrologer.name,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (astrologer.isVerified) ...[
+                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.blue,
+                            size: 16.sp,
+                          ),
+                        ],
+                      ],
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      astrologer.languages.join(", "),
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      '${astrologer.experienceYears}+ Year of Experience',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    if (astrologer.distance != null) 
+                      Text(
+                        '${(astrologer.distance! / 1000).toStringAsFixed(1)} Km away',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
           ),
-          SizedBox(width: 12.w),
-          Expanded(
+          // Price and Button
+          Positioned(
+            right: 0,
+            bottom: 0,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  astrologer.name,
+                  '₹ ${astrologer.hourlyRate.toInt()}/Hr',
                   style: TextStyle(
-                    fontSize: 15.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                Text(
-                  astrologer.languages.join(", "),
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: AppColors.textSecondary,
+                SizedBox(height: 8.h),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 8.h,
                   ),
-                ),
-                Text(
-                  '${astrologer.experienceYears}+ Year of Experience',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: AppColors.textSecondary,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFB800),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Icon(Icons.star, color: AppColors.gold, size: 14.sp),
-                    Text(
-                      ' ${astrologer.rating}',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  child: Text(
+                    'Chat',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
                     ),
-                    const Spacer(),
-                    Text(
-                      '₹${astrologer.hourlyRate}/Hr',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
-            ),
-          ),
-          SizedBox(width: 10.w),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => AstrologyChatPage(astrologer: astrologer),
-                ),
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Text(
-                'Chat',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
-                ),
-              ),
             ),
           ),
         ],
