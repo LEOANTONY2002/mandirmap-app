@@ -1,4 +1,4 @@
-package com.mandirmap.mandirmap_app
+package com.mandirmap
 
 import io.flutter.embedding.android.FlutterActivity
 
