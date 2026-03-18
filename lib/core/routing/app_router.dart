@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/astrology/presentation/pages/astrologer_details_page.dart';
@@ -24,19 +25,18 @@ import '../../features/reels/presentation/pages/reels_page.dart';
 import '../../features/temple_details/presentation/pages/temple_details_page.dart';
 import '../../features/deity/presentation/pages/deity_list_page.dart';
 import '../../features/deity/presentation/pages/deity_details_page.dart';
-import '../widgets/app_shimmer.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier(ref);
   ref.onDispose(refreshNotifier.dispose);
 
   return GoRouter(
-    initialLocation: '/loading',
+    initialLocation: '/splash',
     refreshListenable: refreshNotifier,
     routes: [
       GoRoute(
-        path: '/loading',
-        builder: (context, state) => const _LoadingPage(),
+        path: '/splash',
+        builder: (context, state) => const _SplashPage(),
       ),
       GoRoute(
         path: '/onboarding',
@@ -155,7 +155,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final user = routeUser ?? currentUser;
 
                       if (user == null) {
-                        return const _LoadingPage();
+                        return const _SplashPage();
                       }
 
                       return EditProfilePage(user: user);
@@ -178,34 +178,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       const authPaths = {'/login', '/signup'};
       final isAuthPath = authPaths.contains(location);
-      final isLoadingPath = location == '/loading';
       final isOnboardingPath = location == '/onboarding';
 
+      // 1. Check basic hydration first
       if (!onboardingHydrated || !authHydrated) {
-        return isLoadingPath ? null : '/loading';
+        return location == '/splash' ? null : '/splash';
       }
 
+      // 2. If onboarding not completed, go to onboarding (unless already there)
       if (!onboardingCompleted) {
         return isOnboardingPath ? null : '/onboarding';
       }
 
+      // 3. Handle Authentication
       if (!isLoggedIn) {
         return isAuthPath ? null : '/login';
       }
 
-      // 3. Handle data-ready but loading/refreshing states
-      // ONLY redirect to loading if we have NO value yet and are loading.
-      // If we are just refreshing in background, we stay on the current page.
-      if (userAsync.isLoading && !userAsync.hasValue) {
-        return isLoadingPath ? null : '/loading';
+      // 4. Verification Check: Profile Fetching
+      // If we are logged in but profile is still loading, stay on splash.
+      // We explicitly check .isLoading and ONLY treat it as settled when loading finishes.
+      if (userAsync.isLoading) {
+        return location == '/splash' ? null : '/splash';
       }
 
-      final user = userAsync.asData?.value;
+      final user = userAsync.valueOrNull;
+      // If profile fetch finished but returned null, user must re-login.
       if (user == null || user.id.isEmpty) {
-        return location == '/login' ? null : '/login';
+        return isAuthPath ? null : '/login';
       }
 
-      if (isLoadingPath || isAuthPath || isOnboardingPath) {
+      // 5. Success: Redirect from Loading/Auth paths to Home.
+      if (location == '/splash' || isAuthPath || isOnboardingPath) {
         return '/home';
       }
 
@@ -226,16 +230,24 @@ class _RouterRefreshNotifier extends ChangeNotifier {
   }
 }
 
-class _LoadingPage extends StatelessWidget {
-  const _LoadingPage();
+class _SplashPage extends StatelessWidget {
+  const _SplashPage();
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
-      body: AppShimmer(
-        width: double.infinity,
-        height: double.infinity,
+    return Scaffold(
+      backgroundColor: const Color(0xFFFF6831),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 140.w,
+              height: 140.w,
+            ),
+          ],
+        ),
       ),
     );
   }
