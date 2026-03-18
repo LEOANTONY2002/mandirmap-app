@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/astrology_providers.dart';
 import '../../data/models/astrologer_model.dart';
-import 'astrologer_details_page.dart';
 
 class AstrologyPage extends ConsumerWidget {
   const AstrologyPage({super.key});
@@ -19,10 +19,7 @@ class AstrologyPage extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'Astrology',
           style: TextStyle(
@@ -138,14 +135,7 @@ class AstrologyPage extends ConsumerWidget {
                       final astrologer = astrologers[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      AstrologerDetailsPage(id: astrologer.id),
-                            ),
-                          );
+                          context.push('/astrology/details/${astrologer.id}');
                         },
                         child: _AstrologerCard(astrologer: astrologer),
                       );

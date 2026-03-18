@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mandirmap_app/features/hotel_details/presentation/pages/hotel_details_page.dart';
 
 class NearbyItemCard extends StatelessWidget {
   final LocationModel location;
@@ -22,12 +22,7 @@ class NearbyItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HotelDetailsPage(hotelId: location.id),
-          ),
-        );
+        context.push('/home/hotels/${location.id}');
       },
       child: Container(
         decoration: BoxDecoration(
@@ -76,7 +71,7 @@ class NearbyItemCard extends StatelessWidget {
                           Icon(Icons.star, color: Colors.amber, size: 14.sp),
                           SizedBox(width: 4.w),
                           Text(
-                            location.averageRating.toString(),
+                            location.averageRating.toStringAsFixed(1),
                             style: TextStyle(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.bold,

@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../../core/config/app_constants.dart';
 
+final authHydratedProvider = StateProvider<bool>((ref) => false);
+
 class AuthStateNotifier extends Notifier<bool> {
   final _secureStorage = const FlutterSecureStorage();
 
@@ -19,6 +21,7 @@ class AuthStateNotifier extends Notifier<bool> {
 
     // Both flag and token must exist for a valid session
     state = isLoggedIn && token != null;
+    ref.read(authHydratedProvider.notifier).state = true;
   }
 
   void login() {

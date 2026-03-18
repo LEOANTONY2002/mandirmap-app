@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../theme/app_colors.dart';
 
 /// A drop-in replacement for [Image.network] that shows a shimmer placeholder
@@ -25,19 +26,23 @@ class AppNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (url == null || url!.isEmpty) {
+      debugPrint('[AppNetworkImage] URL is null or empty');
       return _placeholder();
     }
 
-    return Image.network(
-      url!,
+    debugPrint('[AppNetworkImage] Loading URL: $url');
+
+    return CachedNetworkImage(
+      imageUrl: url!,
       width: width,
       height: height,
       fit: fit,
-      errorBuilder: (context, error, stack) => _placeholder(),
-      loadingBuilder: (context, child, progress) {
-        if (progress == null) return child;
-        return _shimmer();
+      placeholder: (context, url) => _shimmer(),
+      errorWidget: (context, url, error) {
+        debugPrint('[AppNetworkImage] Error loading image ($url): $error');
+        return _placeholder();
       },
+      fadeInDuration: const Duration(milliseconds: 300),
     );
   }
 

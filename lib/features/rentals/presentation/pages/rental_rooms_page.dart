@@ -6,6 +6,8 @@ import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 
+import 'package:mandirmap_app/features/hotel_details/presentation/pages/hotel_details_page.dart';
+
 class RentalRoomsPage extends ConsumerWidget {
   const RentalRoomsPage({super.key});
 
@@ -53,7 +55,7 @@ class RentalRoomsPage extends ConsumerWidget {
                   ),
                   itemCount: hotels.length,
                   itemBuilder: (context, index) {
-                    return _buildRentalCard(hotels[index]);
+                    return _buildRentalCard(context, hotels[index]);
                   },
                 );
               },
@@ -90,8 +92,17 @@ class RentalRoomsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildRentalCard(LocationModel hotel) {
-    return Container(
+  Widget _buildRentalCard(BuildContext context, LocationModel hotel) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HotelDetailsPage(hotelId: hotel.id),
+          ),
+        );
+      },
+      child: Container(
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -179,7 +190,7 @@ class RentalRoomsPage extends ConsumerWidget {
                       children: [
                         Icon(Icons.star, color: AppColors.gold, size: 16.sp),
                         Text(
-                          ' ${hotel.averageRating}',
+                          ' ${hotel.averageRating.toStringAsFixed(1)}',
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.bold,

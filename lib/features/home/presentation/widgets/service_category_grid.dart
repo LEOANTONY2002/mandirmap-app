@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../rentals/presentation/pages/rental_rooms_page.dart';
 
 import '../pages/restaurants_page.dart';
 import '../pages/generic_locations_page.dart';
-import '../../../astrology/presentation/pages/astrology_page.dart';
 
 class ServiceCategoryGrid extends StatelessWidget {
   const ServiceCategoryGrid({super.key});
@@ -89,12 +89,7 @@ class ServiceCategoryGrid extends StatelessWidget {
                   ),
                 );
               } else if (labelKey == 'astrology') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AstrologyPage(),
-                  ),
-                );
+                context.go('/astrology');
               } else if (labelKey == 'poojari') {
                 Navigator.push(
                   context,

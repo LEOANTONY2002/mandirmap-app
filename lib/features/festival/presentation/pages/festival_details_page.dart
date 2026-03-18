@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
-import '../../../temple_details/presentation/pages/temple_details_page.dart';
 
 class FestivalDetailsPage extends StatelessWidget {
   final FestivalModel festival;
@@ -124,15 +124,7 @@ class FestivalDetailsPage extends StatelessWidget {
                     SizedBox(height: 15.h),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => TempleDetailsPage(
-                                  templeId: festival.locationId!,
-                                ),
-                          ),
-                        );
+                        context.push('/home/temples/${festival.locationId!}');
                       },
                       child: Container(
                         padding: EdgeInsets.all(15.w),

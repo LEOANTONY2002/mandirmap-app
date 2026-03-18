@@ -35,7 +35,6 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
     final userAsync = ref.watch(userProvider);
     final user = userAsync.valueOrNull;
     final displayName = user?.fullName ?? 'Guest';
-    final firstName = displayName.split(' ').first;
     final avatarUrl = user?.avatarUrl;
 
     return Container(
@@ -74,16 +73,18 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                     Text(
                       'namaste'.tr(),
                       style: TextStyle(
-                        fontSize: 14.sp,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 12.sp,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      firstName,
+                      displayName,
                       style: TextStyle(
-                        fontSize: 12.sp,
-                        color: AppColors.textSecondary,
+                        fontSize: 18.sp,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
                       ),
                     ),
                   ],

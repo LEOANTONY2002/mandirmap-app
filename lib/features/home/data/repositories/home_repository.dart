@@ -167,6 +167,47 @@ class HomeRepository {
       rethrow;
     }
   }
+
+  Future<void> submitReview(String locationId, int rating, String? comment) async {
+    try {
+      await _dio.post(
+        '/locations/$locationId/reviews',
+        data: {
+          'rating': rating,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateReview(
+    String locationId,
+    String reviewId,
+    int rating,
+    String? comment,
+  ) async {
+    try {
+      await _dio.put(
+        '/locations/$locationId/reviews/$reviewId',
+        data: {
+          'rating': rating,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteReview(String locationId, String reviewId) async {
+    try {
+      await _dio.delete('/locations/$locationId/reviews/$reviewId');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class DistrictModel {

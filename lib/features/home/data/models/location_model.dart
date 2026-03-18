@@ -1,3 +1,5 @@
+import '../../../astrology/data/models/review_model.dart';
+
 class LocationModel {
   final String id;
   final String name;
@@ -17,6 +19,7 @@ class LocationModel {
   final TempleModel? temple;
   final HotelModel? hotel;
   final RestaurantModel? restaurant;
+  final List<AstrologerReviewModel> reviews;
 
   LocationModel({
     required this.id,
@@ -37,6 +40,7 @@ class LocationModel {
     this.temple,
     this.hotel,
     this.restaurant,
+    required this.reviews,
   });
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
@@ -79,6 +83,12 @@ class LocationModel {
           json['restaurant'] != null
               ? RestaurantModel.fromJson(json['restaurant'])
               : null,
+      reviews:
+          json['reviews'] is List
+              ? (json['reviews'] as List)
+                  .map((r) => AstrologerReviewModel.fromJson(r))
+                  .toList()
+              : <AstrologerReviewModel>[],
     );
   }
 }
@@ -183,6 +193,8 @@ class FestivalModel {
   final DateTime endDate;
   final String? photoUrl;
   final String? locationId;
+  final String? locationName;
+  final String? locationDistrict;
 
   FestivalModel({
     required this.id,
@@ -192,6 +204,8 @@ class FestivalModel {
     required this.endDate,
     this.photoUrl,
     this.locationId,
+    this.locationName,
+    this.locationDistrict,
   });
 
   factory FestivalModel.fromJson(Map<String, dynamic> json) {
@@ -210,6 +224,8 @@ class FestivalModel {
               : DateTime.now(),
       photoUrl: json['photoUrl']?.toString(),
       locationId: json['locationId']?.toString(),
+      locationName: json['location']?['name']?.toString(),
+      locationDistrict: json['location']?['district']?.toString(),
     );
   }
 }

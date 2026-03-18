@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../domain/user_model.dart';
-import '../../../../features/favorites/presentation/pages/favorites_page.dart';
-import 'edit_profile_page.dart';
 import '../providers/user_provider.dart';
 import '../providers/auth_controller.dart';
 
@@ -147,12 +146,7 @@ class ProfilePage extends ConsumerWidget {
     return Column(
       children: [
         _buildMenuItem(Icons.person_outline, 'Your Profile', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditProfilePage(user: user),
-            ),
-          );
+          context.push('/profile/edit', extra: user);
         }),
         _buildMenuItem(Icons.notifications_none, 'Notifications', () {
           ScaffoldMessenger.of(
@@ -160,10 +154,7 @@ class ProfilePage extends ConsumerWidget {
           ).showSnackBar(SnackBar(content: Text('coming_soon'.tr())));
         }),
         _buildMenuItem(Icons.favorite_border, 'Favourites', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const FavoritesPage()),
-          );
+          context.go('/favorites');
         }),
         _buildMenuItem(Icons.settings_outlined, 'Settings', () {
           ScaffoldMessenger.of(

@@ -2,13 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
-import '../../../festival/presentation/pages/festival_details_page.dart';
-import '../../../temple_details/presentation/pages/temple_details_page.dart';
-import '../../../hotel_details/presentation/pages/hotel_details_page.dart';
-import 'nearby_temples_page.dart';
 import '../providers/home_providers.dart';
 import '../widgets/home_header.dart';
 import '../widgets/deity_list.dart';
@@ -34,7 +31,7 @@ class HomePage extends ConsumerWidget {
                   const _SearchResultsSection()
                 else ...[
                   const _CategoryBar(),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 18.h),
                   const _FestivalSection(),
                   SizedBox(height: 24.h),
                   const DeityList(),
@@ -78,22 +75,10 @@ class _SearchResultsSection extends ConsumerWidget {
             return GestureDetector(
               onTap: () {
                 if (result.category == 'TEMPLE') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => TempleDetailsPage(templeId: result.id),
-                    ),
-                  );
+                  context.push('/home/temples/${result.id}');
                 } else if (result.category == 'HOTEL' ||
                     result.category == 'RENTAL') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => HotelDetailsPage(hotelId: result.id),
-                    ),
-                  );
+                  context.push('/home/hotels/${result.id}');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -248,35 +233,19 @@ class _FestivalSection extends ConsumerWidget {
       data: (festivals) {
         if (festivals.isEmpty) return const SizedBox.shrink();
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Text(
-                'festivals'.tr(),
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            SizedBox(
-              height: 180.h,
-              child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                scrollDirection: Axis.horizontal,
-                itemCount: festivals.length,
-                separatorBuilder: (context, index) => SizedBox(width: 16.w),
-                itemBuilder: (context, index) {
-                  final festival = festivals[index];
-                  return _FestivalCard(festival: festival);
-                },
-              ),
-            ),
-          ],
+        return SizedBox(
+          height: 240.h,
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: festivals.length,
+            separatorBuilder: (context, index) => SizedBox(width: 12.w),
+            itemBuilder: (context, index) {
+              final festival = festivals[index];
+              return _FestivalCard(festival: festival);
+            },
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -294,20 +263,26 @@ class _FestivalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FestivalDetailsPage(festival: festival),
-          ),
-        );
+        context.push('/home/festival-details', extra: festival);
       },
       child: Container(
-        width: 240.w,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.r)),
+        width: 160.w,
+        height: 240.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         child: Stack(
           children: [
+            // Background Image
             ClipRRect(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(28.r),
               child: AppNetworkImage(
                 url: festival.photoUrl,
                 fit: BoxFit.cover,
@@ -316,21 +291,24 @@ class _FestivalCard extends StatelessWidget {
                 fallbackIcon: Icons.festival,
               ),
             ),
+            // Gradient Overlay
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(28.r),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.6),
+                    Colors.black.withValues(alpha: 0.85),
                   ],
+                  stops: const [0.5, 1.0],
                 ),
               ),
             ),
+            // Text Content
             Padding(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -338,19 +316,31 @@ class _FestivalCard extends StatelessWidget {
                   Text(
                     festival.name,
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      height: 1.1,
                     ),
                     maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    festival.description ?? festival.locationName ?? '',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     DateFormat('MMM dd, yyyy').format(festival.startDate),
                     style: TextStyle(
-                      fontSize: 9.sp,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 10.sp,
+                      color: Colors.white.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -379,7 +369,7 @@ class _TempleNearBySection extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'nearby_temples'.tr(),
+                'Temple Near by Me',
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -388,15 +378,10 @@ class _TempleNearBySection extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NearbyTemplesPage(),
-                    ),
-                  );
+                  context.push('/home/nearby-temples');
                 },
                 child: Text(
-                  'view_all'.tr(),
+                  'View all',
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: AppColors.primary,
@@ -428,13 +413,7 @@ class _TempleNearBySection extends ConsumerWidget {
                 return TempleCard(
                   location: temple,
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => TempleDetailsPage(templeId: temple.id),
-                      ),
-                    );
+                    context.push('/home/temples/${temple.id}');
                   },
                 );
               },

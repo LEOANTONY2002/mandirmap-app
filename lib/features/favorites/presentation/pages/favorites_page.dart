@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/widgets/app_network_image.dart';
-import '../../../temple_details/presentation/pages/temple_details_page.dart';
 import '../../data/favorites_repository.dart';
 import '../providers/favorites_providers.dart';
 import '../../../home/data/models/location_model.dart';
 
 class FavoritesPage extends ConsumerStatefulWidget {
-  const FavoritesPage({super.key});
+  const FavoritesPage({super.key, this.showBackButton = false});
+
+  final bool showBackButton;
 
   @override
   ConsumerState<FavoritesPage> createState() => _FavoritesPageState();
@@ -26,10 +28,14 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.sp),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: widget.showBackButton,
+        leading:
+            widget.showBackButton
+                ? IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.sp),
+                  onPressed: () => context.pop(),
+                )
+                : null,
         title: Text(
           'My Favorites',
           style: TextStyle(
@@ -228,12 +234,7 @@ class _TempleFavoriteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TempleDetailsPage(templeId: location.id),
-          ),
-        );
+        context.push('/home/temples/${location.id}');
       },
       child: Container(
         height: 200.h,
