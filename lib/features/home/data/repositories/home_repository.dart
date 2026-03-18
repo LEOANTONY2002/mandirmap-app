@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as path;
 import '../../../../core/network/api_client.dart';
 import '../models/location_model.dart';
 
@@ -204,6 +205,24 @@ class HomeRepository {
   Future<void> deleteReview(String locationId, String reviewId) async {
     try {
       await _dio.delete('/locations/$locationId/reviews/$reviewId');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> uploadLocationImage(String locationId, String filePath) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          filePath,
+          filename: path.basename(filePath),
+        ),
+      });
+      await _dio.post(
+        '/media/upload',
+        queryParameters: {'type': 'IMAGE', 'locationId': locationId},
+        data: formData,
+      );
     } catch (e) {
       rethrow;
     }

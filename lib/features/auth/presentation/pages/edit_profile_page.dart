@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:csc_picker_plus/csc_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../domain/user_model.dart';
 import '../../domain/profile_repository.dart';
 import '../providers/user_provider.dart';
@@ -94,9 +95,6 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         'district': _selectedCity,
       });
 
-      // Refresh user profile provider
-      ref.invalidate(userProvider);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -104,7 +102,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             backgroundColor: AppColors.primary,
           ),
         );
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
@@ -172,19 +170,11 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                                 ? Image.file(_imageFile!, fit: BoxFit.cover)
                                 : widget.user.avatarUrl != null &&
                                     widget.user.avatarUrl!.isNotEmpty
-                                ? CachedNetworkImage(
-                                  imageUrl: widget.user.avatarUrl!,
+                                ? AppNetworkImage(
+                                  url: widget.user.avatarUrl,
                                   fit: BoxFit.cover,
-                                  placeholder:
-                                      (context, url) => Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                  errorWidget:
-                                      (context, url, error) =>
-                                          _buildDefaultAvatar(),
+                                  fallbackIcon: Icons.person,
+                                  fallbackIconSize: 60,
                                 )
                                 : _buildDefaultAvatar(),
                       ),
@@ -235,44 +225,107 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               ),
 
               _buildLabel('Regional Details'),
-              CSCPickerPlus(
-                showStates: true,
-                showCities: true,
-                flagState: CountryFlag.DISABLE,
-                defaultCountry: CscCountry.India,
-                dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.r),
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.border, width: 1),
+              Theme(
+                data: Theme.of(context).copyWith(
+                  inputDecorationTheme: InputDecorationTheme(
+                    isDense: false,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 20.h,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                      borderSide: const BorderSide(color: Color(0xFFECECEC)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                      borderSide: const BorderSide(color: Color(0xFFECECEC)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                      borderSide: const BorderSide(color: Color(0xFFECECEC)),
+                    ),
+                  ),
                 ),
-                selectedItemStyle: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 14.sp,
+                child: CSCPickerPlus(
+                  showStates: true,
+                  showCities: true,
+                  flagState: CountryFlag.DISABLE,
+                  defaultCountry: CscCountry.India,
+                  dropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Colors.white,
+                    border: Border.all(color: const Color(0xFFECECEC)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  disabledDropdownDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Colors.white,
+                    border: Border.all(color: const Color(0xFFECECEC)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  selectedItemStyle: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w500,
+                    height: 2.5,
+                  ),
+                  dropdownHeadingStyle: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  dropdownItemStyle: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14.sp,
+                  ),
+                  dropdownDialogRadius: 10.0,
+                  searchBarRadius: 10.0,
+                  onCountryChanged: (value) {},
+                  onStateChanged:
+                      (value) => setState(() {
+                        _selectedState = value;
+                        _selectedCity = null;
+                      }),
+                  onCityChanged:
+                      (value) => setState(() => _selectedCity = value),
+                  countryDropdownLabel: 'India',
+                  stateDropdownLabel: _selectedState ?? "Select State",
+                  cityDropdownLabel: _selectedCity ?? "Select District",
                 ),
-                onCountryChanged: (value) {},
-                onStateChanged:
-                    (value) => setState(() => _selectedState = value),
-                onCityChanged: (value) => setState(() => _selectedCity = value),
-                stateDropdownLabel: _selectedState ?? "Select State",
-                cityDropdownLabel: _selectedCity ?? "Select District",
               ),
               SizedBox(height: 24.h),
 
-              _buildLabel('Addresses'),
+              _buildLabel('Address'),
               _buildTextField(
                 controller: _address1Controller,
                 hint: 'House No. / Building',
                 icon: Icons.home_outlined,
+                isOptional: true,
               ),
               _buildTextField(
                 controller: _address2Controller,
                 hint: 'Street / Area',
                 icon: Icons.location_on_outlined,
+                isOptional: true,
               ),
               _buildTextField(
                 controller: _address3Controller,
                 hint: 'Landmark',
                 icon: Icons.map_outlined,
+                isOptional: true,
               ),
 
               SizedBox(height: 40.h),
@@ -339,37 +392,21 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     required String hint,
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
+    bool isOptional = false,
   }) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
-      child: TextFormField(
+      child: AppInputField(
         controller: controller,
         keyboardType: keyboardType,
-        style: TextStyle(fontSize: 15.sp, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: AppColors.primary, size: 20.sp),
-          hintText: hint,
-          filled: true,
-          fillColor: AppColors.surface,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.r),
-            borderSide: BorderSide(color: AppColors.border),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.r),
-            borderSide: BorderSide(color: AppColors.border),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.r),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-            vertical: 16.h,
-          ),
-        ),
+        hintText: hint,
+        prefix: Icon(icon, color: AppColors.primary, size: 20.sp),
+        textStyle: TextStyle(fontSize: 15.sp, color: AppColors.textPrimary),
         validator:
-            (v) => (v == null || v.isEmpty) ? 'Field cannot be empty' : null,
+            isOptional
+                ? null
+                : (v) =>
+                    (v == null || v.isEmpty) ? 'Field cannot be empty' : null,
       ),
     );
   }

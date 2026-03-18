@@ -3,16 +3,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/astrology_providers.dart';
 import '../../data/models/astrologer_model.dart';
 import '../../../../core/widgets/app_shimmer.dart';
 
-class AstrologyPage extends ConsumerWidget {
+class AstrologyPage extends ConsumerStatefulWidget {
   const AstrologyPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AstrologyPage> createState() => _AstrologyPageState();
+}
+
+class _AstrologyPageState extends ConsumerState<AstrologyPage> {
+  String _searchQuery = '';
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final astrologersAsync = ref.watch(nearbyAstrologersProvider);
 
     return Scaffold(
@@ -48,30 +69,6 @@ class AstrologyPage extends ConsumerWidget {
                         'assets/images/Astrology.png',
                         fit: BoxFit.cover,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withOpacity(0.1),
-                              Colors.black.withOpacity(0.4),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Talk to\nAstrologer',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.bold,
-                            height: 1.1,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -82,38 +79,26 @@ class AstrologyPage extends ConsumerWidget {
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
               sliver: SliverToBoxAdapter(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30.r),
-                    border: Border.all(color: AppColors.border),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                child: AppInputField(
+                  controller: _searchController,
+                  onChanged:
+                      (value) =>
+                          setState(() => _searchQuery = value.trim().toLowerCase()),
+                  hintText: 'Search place or temples',
+                  prefix: const Icon(Icons.search, color: AppColors.primary),
+                  hintStyle: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 14.sp,
                   ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search place or temples',
-                      hintStyle: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14.sp,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: AppColors.primary,
-                      ),
-                      suffixIcon: const Icon(
-                        Icons.mic_none,
-                        color: AppColors.primary,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 15.h),
+                  borderRadius: 20,
+                  borderColor: AppColors.border,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -121,7 +106,19 @@ class AstrologyPage extends ConsumerWidget {
             // 3. Astrologers List
             astrologersAsync.when(
               data: (astrologers) {
-                if (astrologers.isEmpty) {
+                final filteredAstrologers =
+                    _searchQuery.isEmpty
+                        ? astrologers
+                        : astrologers.where((astrologer) {
+                          final name = astrologer.name.toLowerCase();
+                          final languages = astrologer.languages
+                              .join(' ')
+                              .toLowerCase();
+                          return name.contains(_searchQuery) ||
+                              languages.contains(_searchQuery);
+                        }).toList();
+
+                if (filteredAstrologers.isEmpty) {
                   return const SliverFillRemaining(
                     child: Center(child: Text('No astrologers found.')),
                   );
@@ -133,24 +130,28 @@ class AstrologyPage extends ConsumerWidget {
                   ),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      final astrologer = astrologers[index];
+                      final astrologer = filteredAstrologers[index];
                       return GestureDetector(
                         onTap: () {
                           context.push('/astrology/details/${astrologer.id}');
                         },
                         child: _AstrologerCard(astrologer: astrologer),
                       );
-                    }, childCount: astrologers.length),
+                    }, childCount: filteredAstrologers.length),
                   ),
                 );
               },
-              loading: () => const SliverFillRemaining(
-                child: ShimmerList(
-                  height: 120, 
-                  isCircleAvatar: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-              ),
+              loading:
+                  () => const SliverFillRemaining(
+                    child: ShimmerList(
+                      height: 120,
+                      isCircleAvatar: true,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                    ),
+                  ),
               error:
                   (err, _) => SliverFillRemaining(
                     child: Center(child: Text('Error: $err')),

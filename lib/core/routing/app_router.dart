@@ -150,7 +150,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'edit',
                     builder: (context, state) {
-                      final user = state.extra as UserModel;
+                      final routeUser = state.extra as UserModel?;
+                      final currentUser = ref.read(userProvider).valueOrNull;
+                      final user = routeUser ?? currentUser;
+
+                      if (user == null) {
+                        return const _LoadingPage();
+                      }
+
                       return EditProfilePage(user: user);
                     },
                   ),

@@ -97,7 +97,7 @@ class HotelModel {
   final double pricePerDay;
   final String? contactPhone;
   final String? whatsapp;
-  final List<String> amenities;
+  final List<AmenityModel> amenities;
 
   HotelModel({
     required this.pricePerDay,
@@ -114,15 +114,29 @@ class HotelModel {
       whatsapp: json['whatsapp']?.toString(),
       amenities:
           json['amenities'] is List
-              ? (json['amenities'] as List).map((e) => e.toString()).toList()
-              : <String>[],
+              ? (json['amenities'] as List)
+                  .map(
+                    (e) =>
+                        e is Map && e['amenity'] is Map
+                            ? AmenityModel.fromJson(
+                              (e['amenity'] as Map).cast<String, dynamic>(),
+                            )
+                            : e is Map
+                            ? AmenityModel.fromJson(
+                              e.cast<String, dynamic>(),
+                            )
+                            : null,
+                  )
+                  .whereType<AmenityModel>()
+                  .toList()
+              : <AmenityModel>[],
     );
   }
 }
 
 class RestaurantModel {
   final bool isPureVeg;
-  final List<String> menuItems;
+  final List<RestaurantMenuItemModel> menuItems;
 
   RestaurantModel({required this.isPureVeg, required this.menuItems});
 
@@ -131,8 +145,54 @@ class RestaurantModel {
       isPureVeg: json['isPureVeg']?.toString().toLowerCase() == 'true',
       menuItems:
           json['menuItems'] is List
-              ? (json['menuItems'] as List).map((e) => e.toString()).toList()
-              : <String>[],
+              ? (json['menuItems'] as List)
+                  .whereType<Map>()
+                  .map(
+                    (e) => RestaurantMenuItemModel.fromJson(
+                      e.cast<String, dynamic>(),
+                    ),
+                  )
+                  .toList()
+              : <RestaurantMenuItemModel>[],
+    );
+  }
+}
+
+class AmenityModel {
+  final int id;
+  final String title;
+  final String? image;
+
+  AmenityModel({required this.id, required this.title, this.image});
+
+  factory AmenityModel.fromJson(Map<String, dynamic> json) {
+    return AmenityModel(
+      id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      title: json['title']?.toString() ?? '',
+      image: json['image']?.toString(),
+    );
+  }
+}
+
+class RestaurantMenuItemModel {
+  final String id;
+  final String name;
+  final String? image;
+  final double price;
+
+  RestaurantMenuItemModel({
+    required this.id,
+    required this.name,
+    this.image,
+    required this.price,
+  });
+
+  factory RestaurantMenuItemModel.fromJson(Map<String, dynamic> json) {
+    return RestaurantMenuItemModel(
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      image: json['image']?.toString(),
+      price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
     );
   }
 }

@@ -165,7 +165,7 @@ class NearbyItemCard extends StatelessWidget {
                       location.restaurant!.menuItems.isNotEmpty) ...[
                     SizedBox(height: 8.h),
                     Text(
-                      'Specials: ${location.restaurant!.menuItems.take(2).join(", ")}...',
+                      'Specials: ${location.restaurant!.menuItems.take(2).map((item) => item.name).join(", ")}...',
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: AppColors.textSecondary,

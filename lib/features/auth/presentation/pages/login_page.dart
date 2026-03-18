@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
 import '../providers/auth_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -103,7 +104,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 children: [
                   SizedBox(height: 60.h),
                   Text(
-                    'Welcome Back',
+                    'Welcome',
                     style: TextStyle(
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w800,
@@ -131,7 +132,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  TextFormField(
+                  AppInputField(
                     controller: _emailController,
                     focusNode: _emailFocusNode,
                     keyboardType: TextInputType.emailAddress,
@@ -140,30 +141,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         (_) => FocusScope.of(
                           context,
                         ).requestFocus(_passwordFocusNode),
-                    style: TextStyle(fontSize: 16.sp),
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.email_outlined,
-                        color: AppColors.primary,
-                      ),
-                      hintText: 'name@example.com',
-                      filled: true,
-                      fillColor: AppColors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.primary,
-                          width: 2,
-                        ),
-                      ),
+                    hintText: 'name@example.com',
+                    prefix: const Icon(
+                      Icons.email_outlined,
+                      color: AppColors.primary,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -187,49 +168,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  TextFormField(
+                  AppInputField(
                     controller: _passwordController,
                     focusNode: _passwordFocusNode,
                     obscureText: _obscurePassword,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _login(),
-                    style: TextStyle(fontSize: 16.sp),
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.lock_outline,
+                    hintText: 'Enter your password',
+                    prefix: const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.primary,
+                    ),
+                    suffix: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
                         color: AppColors.primary,
                       ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppColors.primary,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                      ),
-                      hintText: 'Enter your password',
-                      filled: true,
-                      fillColor: AppColors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(
-                          color: AppColors.primary,
-                          width: 2,
-                        ),
-                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

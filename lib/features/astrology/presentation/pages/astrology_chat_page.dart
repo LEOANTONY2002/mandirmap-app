@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
 import '../../data/models/astrologer_model.dart';
 
 class AstrologyChatPage extends StatefulWidget {
@@ -136,19 +137,14 @@ class _AstrologyChatPageState extends State<AstrologyChatPage> {
               onPressed: () {},
             ),
             Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(25.r),
-                ),
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: 'Type your message...',
-                    border: InputBorder.none,
-                  ),
-                ),
+              child: AppInputField(
+                controller: _controller,
+                hintText: 'Type your message...',
+                backgroundColor: AppColors.surface,
+                borderColor: AppColors.surface,
+                borderRadius: 25,
+                boxShadow: const [],
+                containerPadding: EdgeInsets.symmetric(horizontal: 15.w),
               ),
             ),
             SizedBox(width: 10.w),

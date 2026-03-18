@@ -78,6 +78,7 @@ class _SearchResultsSection extends ConsumerWidget {
                 if (result.category == 'TEMPLE') {
                   context.push('/home/temples/${result.id}');
                 } else if (result.category == 'HOTEL' ||
+                    result.category == 'RESTAURANT' ||
                     result.category == 'RENTAL') {
                   context.push('/home/hotels/${result.id}');
                 } else {

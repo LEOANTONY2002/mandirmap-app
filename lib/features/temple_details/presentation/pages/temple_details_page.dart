@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/animated_segmented_tabs.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/temple_providers.dart';
 import '../../../favorites/presentation/providers/favorites_providers.dart';
@@ -306,15 +307,42 @@ class _TempleDetailSection extends StatefulWidget {
   State<_TempleDetailSection> createState() => _TempleDetailSectionState();
 }
 
-class _TempleDetailSectionState extends State<_TempleDetailSection> {
+class _TempleDetailSectionState extends State<_TempleDetailSection>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
+  late final TabController _tabController;
+
+  void _changeTab(int nextIndex) {
+    if (nextIndex < 0 || nextIndex > 1 || nextIndex == _selectedIndex) return;
+    _tabController.animateTo(nextIndex);
+    setState(() => _selectedIndex = nextIndex);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      final nextIndex = _tabController.index;
+      if (_selectedIndex != nextIndex && mounted) {
+        setState(() => _selectedIndex = nextIndex);
+      }
+    });
+  }
 
   @override
   void didUpdateWidget(covariant _TempleDetailSection oldWidget) {
     if (oldWidget.group != widget.group) {
       _selectedIndex = 0;
+      _tabController.index = 0;
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -332,57 +360,58 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
     return Column(
       children: [
         if (tabs.isNotEmpty) ...[
-          Container(
-            height: 48.h,
-            padding: EdgeInsets.all(4.w),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Row(
-              children: [
-                Expanded(child: _buildSegmentButton(tabs[0], 0)),
-                Expanded(child: _buildSegmentButton(tabs[1], 1)),
+          AnimatedSegmentedTabs(
+            controller: _tabController,
+            items: [
+              SegmentedTabItem(label: tabs[0], icon: _tabIconFor(widget.group, 0)),
+              SegmentedTabItem(label: tabs[1], icon: _tabIconFor(widget.group, 1)),
+            ],
+          ),
+          SizedBox(
+            width: 0,
+            height: 0,
+            child: TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: tabs[0]),
+                Tab(text: tabs[1]),
               ],
             ),
           ),
           SizedBox(height: 20.h),
         ],
-        _buildContent(),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onHorizontalDragEnd: (details) {
+            final velocity = details.primaryVelocity ?? 0;
+            if (velocity < -150) {
+              _changeTab(_selectedIndex + 1);
+            } else if (velocity > 150) {
+              _changeTab(_selectedIndex - 1);
+            }
+          },
+          child: _buildContent(),
+        ),
       ],
     );
   }
 
-  Widget _buildSegmentButton(String label, int index) {
-    final isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedIndex = index),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFFFB200) : Colors.white,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow:
-              isSelected
-                  ? [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(20),
-                      blurRadius: 2,
-                      offset: const Offset(0, 1),
-                    ),
-                  ]
-                  : null,
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : AppColors.textSecondary,
-            fontSize: 13.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
+  IconData _tabIconFor(int group, int index) {
+    return switch ((group, index)) {
+      (0, 0) => Icons.history_edu,
+      (0, 1) => Icons.location_on_outlined,
+      (1, 0) => Icons.access_time,
+      (1, 1) => Icons.volunteer_activism_outlined,
+      (2, 0) => Icons.photo_library_outlined,
+      (2, 1) => Icons.video_collection_outlined,
+      (3, 0) => Icons.near_me,
+      (3, 1) => Icons.groups_outlined,
+      (6, 0) => Icons.directions_bus,
+      (6, 1) => Icons.book_online_outlined,
+      (7, 0) => Icons.directions_bus_outlined,
+      (7, 1) => Icons.train_outlined,
+      _ => Icons.circle_outlined,
+    };
   }
 
   Widget _buildContent() {
@@ -414,13 +443,13 @@ class _TempleDetailSectionState extends State<_TempleDetailSection> {
         emptyMessage: 'No rentals or rooms found nearby',
       );
     } else if (widget.group == 5) {
-      // Hotel & Restaurants -> Category HOTEL
+      // Hotel & Restaurants -> Category RESTAURANT
       return _NearbyExploreList(
         currentTempleId: widget.temple.id,
         lat: widget.temple.latitude,
         lng: widget.temple.longitude,
-        category: 'HOTEL',
-        emptyMessage: 'No hotels found nearby',
+        category: 'RESTAURANT',
+        emptyMessage: 'No hotels or restaurants found nearby',
       );
     } else {
       return const Center(child: Text('Coming Soon'));

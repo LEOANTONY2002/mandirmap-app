@@ -48,10 +48,11 @@ class ProfilePage extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const AppShimmer(
-          width: double.infinity,
-          height: double.infinity,
-        ),
+        loading:
+            () => const AppShimmer(
+              width: double.infinity,
+              height: double.infinity,
+            ),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );
@@ -70,36 +71,11 @@ class ProfilePage extends ConsumerWidget {
               ),
               child: ClipOval(
                 child: AppNetworkImage(
-                  url:
-                      user.avatarUrl ??
-                      'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=200&q=80',
+                  url: user.avatarUrl,
                   height: 70.r,
                   width: 70.r,
                   fit: BoxFit.cover,
                   fallbackIcon: Icons.person,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(4.w),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  color: AppColors.primary,
-                  size: 14.sp,
                 ),
               ),
             ),
@@ -149,8 +125,11 @@ class ProfilePage extends ConsumerWidget {
   ) {
     return Column(
       children: [
-        _buildMenuItem(Icons.person_outline, 'Your Profile', () {
-          context.push('/profile/edit', extra: user);
+        _buildMenuItem(Icons.person_outline, 'Your Profile', () async {
+          final didUpdate = await context.push('/profile/edit', extra: user);
+          if (didUpdate == true) {
+            ref.invalidate(userProvider);
+          }
         }),
         _buildMenuItem(Icons.notifications_none, 'Notifications', () {
           ScaffoldMessenger.of(

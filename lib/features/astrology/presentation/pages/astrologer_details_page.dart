@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../core/widgets/animated_segmented_tabs.dart';
+import '../../../../core/widgets/app_input_field.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
+import '../../../../core/widgets/app_shimmer.dart';
+import '../../../auth/domain/user_model.dart';
+import '../../../auth/presentation/providers/user_provider.dart';
 import '../../data/models/astrologer_model.dart';
 import '../../data/models/review_model.dart';
 import '../../data/repositories/astrology_repository.dart';
 import '../providers/astrology_providers.dart';
-import '../../../auth/domain/user_model.dart';
-import '../../../auth/presentation/providers/user_provider.dart';
-import '../../../../core/widgets/app_shimmer.dart';
+
 class AstrologerDetailsPage extends ConsumerStatefulWidget {
   final String id;
   const AstrologerDetailsPage({super.key, required this.id});
@@ -69,6 +73,29 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
     );
   }
 
+  Future<void> _openReviewComposer(
+    BuildContext context,
+    AstrologerModel astrologer, {
+    AstrologerReviewModel? review,
+  }) async {
+    final didChange = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder:
+            (_) => _AstrologerReviewFormPage(
+              astrologerId: astrologer.id,
+              reviewId: review?.id,
+              initialRating: review?.rating ?? 5,
+              initialComment: review?.comment ?? '',
+              isEditing: review != null,
+            ),
+      ),
+    );
+
+    if (didChange == true) {
+      await ref.refresh(astrologerDetailsProvider(astrologer.id).future);
+    }
+  }
+
   Widget _buildContent(AstrologerModel astrologer, UserModel? user) {
     return Column(
       children: [
@@ -85,6 +112,17 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                       _buildActionButtons(astrologer),
                       SizedBox(height: 30.h),
                       _buildTabBar(),
+                      SizedBox(
+                        width: 0,
+                        height: 0,
+                        child: TabBar(
+                          controller: _tabController,
+                          tabs: const [
+                            Tab(text: 'User Reviews'),
+                            Tab(text: 'Astrologer Details'),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -318,14 +356,18 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
   }
 
   Widget _buildTabBar() {
-    return TabBar(
+    return AnimatedSegmentedTabs(
       controller: _tabController,
-      labelColor: AppColors.primary,
-      unselectedLabelColor: AppColors.textSecondary,
-      indicatorColor: AppColors.primary,
-      indicatorSize: TabBarIndicatorSize.label,
-      labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-      tabs: const [Tab(text: 'User Reviews'), Tab(text: 'Astrologer Details')],
+      items: const [
+        SegmentedTabItem(
+          label: 'Reviews',
+          icon: Icons.star_rounded,
+        ),
+        SegmentedTabItem(
+          label: 'Details',
+          icon: Icons.info_outline_rounded,
+        ),
+      ],
     );
   }
 
@@ -356,7 +398,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                 GestureDetector(
                   onTap: () {
                     if (user != null) {
-                      _showAddReviewDialog(context, astrologer);
+                      _openReviewComposer(context, astrologer);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Please login to review.')),
@@ -458,7 +500,11 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      _showAddReviewDialog(context, astrologer, review: review);
+                      _openReviewComposer(
+                        context,
+                        astrologer,
+                        review: review,
+                      );
                     } else if (value == 'delete') {
                       _deleteReview(context, astrologer, review);
                     }
@@ -540,137 +586,6 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
     );
   }
 
-  void _showAddReviewDialog(BuildContext context, AstrologerModel astrologer, {AstrologerReviewModel? review}) {
-    int rating = review?.rating ?? 5;
-    final commentController = TextEditingController(text: review?.comment ?? '');
-    bool isLoading = false;
-    String? errorMessage;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text(review == null ? 'Add Review' : 'Edit Review'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      5,
-                      (index) => IconButton(
-                        icon: Icon(
-                          Icons.star,
-                          color: index < rating ? Colors.amber : Colors.grey,
-                          size: 32.sp,
-                        ),
-                        onPressed: isLoading
-                            ? null
-                            : () {
-                                setState(() {
-                                  rating = index + 1;
-                                  errorMessage = null;
-                                });
-                              },
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  TextField(
-                    controller: commentController,
-                    enabled: !isLoading,
-                    decoration: const InputDecoration(
-                      hintText: 'Write your experience (optional)',
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-                  ),
-                  if (errorMessage != null) ...[
-                    SizedBox(height: 8.h),
-                    Text(
-                      errorMessage!,
-                      style: TextStyle(color: Colors.red, fontSize: 14.sp),
-                    ),
-                  ],
-                ],
-              ),
-              actions: [
-                if (!isLoading)
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          setState(() {
-                            isLoading = true;
-                            errorMessage = null;
-                          });
-
-                          try {
-                            if (review == null) {
-                              await ref
-                                  .read(astrologyRepositoryProvider)
-                                  .submitReview(
-                                    astrologer.id,
-                                    rating,
-                                    commentController.text.trim(),
-                                  );
-                            } else {
-                              await ref
-                                  .read(astrologyRepositoryProvider)
-                                  .updateReview(
-                                    astrologer.id,
-                                    review.id,
-                                    rating,
-                                    commentController.text.trim(),
-                                  );
-                            }
-
-                            // Refresh the details provider and WAIT for it
-                            final _ = await ref.refresh(
-                                astrologerDetailsProvider(astrologer.id).future);
-
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content:
-                                        Text(review == null ? 'Review added successfully!' : 'Review updated successfully!')),
-                              );
-                            }
-                          } catch (e) {
-                            if (context.mounted) {
-                              setState(() {
-                                isLoading = false;
-                                errorMessage =
-                                    'Failed to save review. Please try again.';
-                              });
-                            }
-                          }
-                        },
-                  child: isLoading
-                      ? SizedBox(
-                          width: 20.w,
-                          height: 20.w,
-                          child: const CircularProgressIndicator(
-                              strokeWidth: 2, color: Colors.white),
-                        )
-                      : const Text('Submit'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
   void _deleteReview(BuildContext context, AstrologerModel astrologer, dynamic review) {
     bool isLoading = false;
     showDialog(
@@ -734,6 +649,257 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
           },
         );
       },
+    );
+  }
+}
+
+class _AstrologerReviewFormPage extends ConsumerStatefulWidget {
+  const _AstrologerReviewFormPage({
+    required this.astrologerId,
+    this.reviewId,
+    required this.initialRating,
+    required this.initialComment,
+    required this.isEditing,
+  });
+
+  final String astrologerId;
+  final String? reviewId;
+  final int initialRating;
+  final String initialComment;
+  final bool isEditing;
+
+  @override
+  ConsumerState<_AstrologerReviewFormPage> createState() =>
+      _AstrologerReviewFormPageState();
+}
+
+class _AstrologerReviewFormPageState
+    extends ConsumerState<_AstrologerReviewFormPage> {
+  late int _rating;
+  late TextEditingController _commentController;
+  bool _isSubmitting = false;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _rating = widget.initialRating;
+    _commentController = TextEditingController(text: widget.initialComment);
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    if (_isSubmitting) return;
+    setState(() {
+      _isSubmitting = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final repository = ref.read(astrologyRepositoryProvider);
+      if (widget.isEditing && widget.reviewId != null) {
+        await repository.updateReview(
+          widget.astrologerId,
+          widget.reviewId!,
+          _rating,
+          _commentController.text.trim(),
+        );
+      } else {
+        await repository.submitReview(
+          widget.astrologerId,
+          _rating,
+          _commentController.text.trim(),
+        );
+      }
+
+      if (!mounted) return;
+      final didChange = await Navigator.of(context).push<bool>(
+        MaterialPageRoute(
+          builder: (_) => _AstrologerReviewSuccessPage(rating: _rating),
+        ),
+      );
+      if (!mounted) return;
+      Navigator.of(context).pop(didChange == true);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+        _errorMessage = 'Failed to save review. Please try again.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(widget.isEditing ? 'Edit Review' : 'Add Review'),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Share your experience',
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(height: 16.h),
+              AppInputField(
+                controller: _commentController,
+                maxLines: 8,
+                hintText: 'Write your experience (optional)',
+                backgroundColor: const Color(0xFFFFFBF5),
+                borderColor: const Color(0xFFFFE0B2),
+                borderRadius: 20,
+                contentPadding: EdgeInsets.all(16.w),
+                hintStyle: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13.sp,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    5,
+                    (index) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      child: InkWell(
+                        onTap: () => setState(() => _rating = index + 1),
+                        borderRadius: BorderRadius.circular(24.r),
+                        child: Icon(
+                          index < _rating ? Icons.star : Icons.star_border,
+                          color: const Color(0xFFFFC107),
+                          size: 34.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              if (_errorMessage != null) ...[
+                SizedBox(height: 16.h),
+                Text(
+                  _errorMessage!,
+                  style: TextStyle(color: Colors.red, fontSize: 14.sp),
+                ),
+              ],
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isSubmitting ? null : _submitReview,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    minimumSize: Size(double.infinity, 52.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.r),
+                    ),
+                  ),
+                  child:
+                      _isSubmitting
+                          ? SizedBox(
+                            width: 20.w,
+                            height: 20.w,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                          : Text(
+                            widget.isEditing ? 'Update Review' : 'Add Review',
+                          ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AstrologerReviewSuccessPage extends StatelessWidget {
+  const _AstrologerReviewSuccessPage({required this.rating});
+
+  final int rating;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 24.h),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                ),
+              ),
+              const Spacer(),
+              Container(
+                width: 92.w,
+                height: 92.w,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFF1EB),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.star,
+                  color: const Color(0xFFFFC107),
+                  size: 46.sp,
+                ),
+              ),
+              SizedBox(height: 18.h),
+              Text(
+                rating.toString(),
+                style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(height: 10.h),
+              const Text(
+                'Thank you for the review',
+                style: TextStyle(color: Colors.green),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    minimumSize: Size(double.infinity, 52.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.r),
+                    ),
+                  ),
+                  child: const Text('Done'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../auth/presentation/providers/user_provider.dart';
 import '../providers/home_providers.dart';
 
@@ -54,14 +56,15 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                 height: 48.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image:
-                        (avatarUrl != null && avatarUrl.isNotEmpty)
-                            ? NetworkImage(avatarUrl) as ImageProvider
-                            : const NetworkImage(
-                              'https://ui-avatars.com/api/?background=FF6B35&color=fff&name=User&size=100',
-                            ),
+                ),
+                child: ClipOval(
+                  child: AppNetworkImage(
+                    url: avatarUrl,
+                    width: 48.r,
+                    height: 48.r,
                     fit: BoxFit.cover,
+                    fallbackIcon: Icons.person,
+                    fallbackIconSize: 22,
                   ),
                 ),
               ),
@@ -103,52 +106,35 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
             ],
           ),
           SizedBox(height: 20.h),
-          Container(
-            height: 44.h,
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-              border: Border.all(color: const Color(0xFFEEEEEE)),
+          AppInputField(
+            onChanged: _onSearchChanged,
+            hintText: 'Search place or temples',
+            prefix: Icon(
+              Icons.search,
+              color: const Color(0xFFFF6A3D),
+              size: 20.sp,
             ),
-            child: Row(
-              children: [
-                Icon(Icons.search, color: const Color(0xFFCCCCCC), size: 20.sp),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: TextField(
-                    onChanged: _onSearchChanged,
-                    style: TextStyle(fontSize: 14.sp),
-                    cursorHeight: 20.h,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      hintText: 'Search place or temples',
-                      hintStyle: TextStyle(
-                        color: const Color(0xFFCCCCCC),
-                        fontSize: 12.sp,
-                      ),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      hoverColor: Colors.transparent,
-                      contentPadding: EdgeInsets.symmetric(vertical: 14.h),
-                      focusColor: Colors.transparent,
-                    ),
-                  ),
-                ),
-                Icon(
-                  Icons.mic_none,
-                  color: const Color(0xFFCCCCCC),
-                  size: 20.sp,
-                ),
-              ],
+            hintStyle: TextStyle(
+              color: const Color(0xFFB7B7B7),
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w400,
             ),
+            textStyle: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
+            cursorHeight: 20.h,
+            containerPadding: EdgeInsets.symmetric(horizontal: 16.w),
+            contentPadding: EdgeInsets.symmetric(vertical: 14.h),
+            borderRadius: 12,
+            borderColor: const Color(0xFFEEEEEE),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
         ],
       ),

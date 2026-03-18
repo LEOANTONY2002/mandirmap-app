@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/widgets/animated_segmented_tabs.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../data/favorites_repository.dart';
 import '../providers/favorites_providers.dart';
@@ -17,8 +18,21 @@ class FavoritesPage extends ConsumerStatefulWidget {
   ConsumerState<FavoritesPage> createState() => _FavoritesPageState();
 }
 
-class _FavoritesPageState extends ConsumerState<FavoritesPage> {
-  int _selectedTabIndex = 0; // 0: Temple, 1: Restaurants, 2: Rooms
+class _FavoritesPageState extends ConsumerState<FavoritesPage>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +67,29 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
           Expanded(
             child: favoritesAsync.when(
               data: (favorites) {
-                final filtered = _getFilteredFavorites(favorites);
-                if (filtered.isEmpty) {
-                  return _buildEmptyState();
-                }
-                return _buildList(filtered);
+                return TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildTabContent(
+                      _getFilteredFavorites(favorites, 0),
+                      0,
+                    ),
+                    _buildTabContent(
+                      _getFilteredFavorites(favorites, 1),
+                      1,
+                    ),
+                    _buildTabContent(
+                      _getFilteredFavorites(favorites, 2),
+                      2,
+                    ),
+                  ],
+                );
               },
-              loading: () => const ShimmerList(height: 150, padding: EdgeInsets.all(16)),
+              loading:
+                  () => const ShimmerList(
+                    height: 150,
+                    padding: EdgeInsets.all(16),
+                  ),
               error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),
@@ -69,62 +99,28 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
   }
 
   Widget _buildTabs() {
-    const Color tabColor = Color(0xFFFFB200);
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: Container(
-        height: 44.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: tabColor, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: tabColor.withOpacity(0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _TabButton(
-              label: 'Temple',
-              icon: Icons.home_filled,
-              isSelected: _selectedTabIndex == 0,
-              isFirst: true,
-              onTap: () => setState(() => _selectedTabIndex = 0),
-            ),
-            _buildDivider(tabColor, 0, 1),
-            _TabButton(
-              label: 'Resta',
-              icon: Icons.restaurant_menu,
-              isSelected: _selectedTabIndex == 1,
-              onTap: () => setState(() => _selectedTabIndex = 1),
-            ),
-            _buildDivider(tabColor, 1, 2),
-            _TabButton(
-              label: 'Rooms',
-              icon: Icons.bed_rounded,
-              isSelected: _selectedTabIndex == 2,
-              isLast: true,
-              onTap: () => setState(() => _selectedTabIndex = 2),
-            ),
-          ],
-        ),
+      child: AnimatedSegmentedTabs(
+        controller: _tabController,
+        items: const [
+          SegmentedTabItem(label: 'Temple', icon: Icons.home_filled),
+          SegmentedTabItem(
+            label: 'Resta',
+            icon: Icons.restaurant_menu,
+          ),
+          SegmentedTabItem(label: 'Rooms', icon: Icons.bed_rounded),
+        ],
       ),
     );
   }
 
-  Widget _buildDivider(Color color, int leftIdx, int rightIdx) {
-    bool hide = _selectedTabIndex == leftIdx || _selectedTabIndex == rightIdx;
-    return Container(width: hide ? 0 : 1.5, color: color);
-  }
-
-  List<LocationModel> _getFilteredFavorites(List<LocationModel> favorites) {
-    switch (_selectedTabIndex) {
+  List<LocationModel> _getFilteredFavorites(
+    List<LocationModel> favorites,
+    int tabIndex,
+  ) {
+    switch (tabIndex) {
       case 0:
         return favorites.where((l) => l.category == 'TEMPLE').toList();
       case 1:
@@ -138,26 +134,34 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
     }
   }
 
-  Widget _buildList(List<LocationModel> items) {
+  Widget _buildTabContent(List<LocationModel> items, int tabIndex) {
+    if (items.isEmpty) {
+      return _buildEmptyState(tabIndex);
+    }
+    return _buildList(items, tabIndex);
+  }
+
+  Widget _buildList(List<LocationModel> items, int tabIndex) {
     return ListView.separated(
       padding: EdgeInsets.all(16.w),
       itemCount: items.length,
       separatorBuilder: (context, index) => SizedBox(height: 16.h),
       itemBuilder: (context, index) {
         final item = items[index];
-        if (_selectedTabIndex == 0) return _TempleFavoriteCard(location: item);
-        if (_selectedTabIndex == 1)
+        if (tabIndex == 0) return _TempleFavoriteCard(location: item);
+        if (tabIndex == 1) {
           return _RestaurantFavoriteCard(location: item);
+        }
         return _RoomFavoriteCard(location: item);
       },
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(int tabIndex) {
     String message = "No favorites here yet";
-    if (_selectedTabIndex == 0) message = "No favorite temples found";
-    if (_selectedTabIndex == 1) message = "No favorite restaurants found";
-    if (_selectedTabIndex == 2) message = "No favorite rooms found";
+    if (tabIndex == 0) message = "No favorite temples found";
+    if (tabIndex == 1) message = "No favorite restaurants found";
+    if (tabIndex == 2) message = "No favorite rooms found";
 
     return Center(
       child: Column(
@@ -167,61 +171,6 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
           SizedBox(height: 16.h),
           Text(message, style: TextStyle(color: Colors.grey, fontSize: 16.sp)),
         ],
-      ),
-    );
-  }
-}
-
-class _TabButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool isSelected;
-  final bool isFirst;
-  final bool isLast;
-  final VoidCallback onTap;
-
-  const _TabButton({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    this.isFirst = false,
-    this.isLast = false,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const Color tabColor = Color(0xFFFFB200);
-    final Color contentColor = isSelected ? Colors.white : Colors.black;
-    final Color bgColor = isSelected ? tabColor : Colors.white;
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.horizontal(
-              left: isFirst ? Radius.circular(10.r) : Radius.zero,
-              right: isLast ? Radius.circular(10.r) : Radius.zero,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 18.sp, color: contentColor),
-              SizedBox(width: 6.w),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: contentColor,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

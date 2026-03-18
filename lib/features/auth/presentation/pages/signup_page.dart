@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:csc_picker_plus/csc_picker_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_input_field.dart';
 import '../providers/auth_controller.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
@@ -229,57 +230,102 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   // State & District Selection (CSC Picker)
                   _buildLabel('Regional Details'),
                   SizedBox(height: 8.h),
-                  CSCPickerPlus(
-                    showStates: true,
-                    showCities: true,
-                    flagState: CountryFlag.DISABLE,
-                    dropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                      color: AppColors.surface,
-                      border: Border.all(color: AppColors.border, width: 1),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      inputDecorationTheme: InputDecorationTheme(
+                        isDense: false,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 20.h,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFECECEC),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFECECEC),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFECECEC),
+                          ),
+                        ),
+                      ),
                     ),
-                    disabledDropdownDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                      color: Colors.grey.shade100,
-                      border: Border.all(color: AppColors.border, width: 1),
+                    child: CSCPickerPlus(
+                      showStates: true,
+                      showCities: true,
+                      flagState: CountryFlag.DISABLE,
+                      dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFECECEC)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 18,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      disabledDropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFFECECEC)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 18,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      selectedItemStyle: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 2.5,
+                      ),
+                      dropdownHeadingStyle: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      dropdownItemStyle: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 14.sp,
+                      ),
+                      dropdownDialogRadius: 10.0,
+                      searchBarRadius: 10.0,
+                      onCountryChanged:
+                          (
+                            value,
+                          ) {}, // We'll force India in layout if possible, or just let users pick.
+                      // CSC Picker starts with Country. Let's initialize to India if we can.
+                      // Actually, CSCPicker doesn't have an 'initialCountry' parameter that works easily for just state/city.
+                      // We will allow users to pick Country, but we can set default country.
+                      defaultCountry: CscCountry.India,
+                      onStateChanged: (value) {
+                        setState(() {
+                          _selectedState = value;
+                          _selectedCity = null;
+                        });
+                      },
+                      onCityChanged: (value) {
+                        setState(() {
+                          _selectedCity = value;
+                        });
+                      },
+                      countryDropdownLabel: "India",
+                      stateDropdownLabel: "State",
+                      cityDropdownLabel: "District",
                     ),
-                    selectedItemStyle: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14.sp,
-                    ),
-                    dropdownHeadingStyle: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    dropdownItemStyle: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 14.sp,
-                    ),
-                    dropdownDialogRadius: 10.0,
-                    searchBarRadius: 10.0,
-                    onCountryChanged:
-                        (
-                          value,
-                        ) {}, // We'll force India in layout if possible, or just let users pick.
-                    // CSC Picker starts with Country. Let's initialize to India if we can.
-                    // Actually, CSCPicker doesn't have an 'initialCountry' parameter that works easily for just state/city.
-                    // We will allow users to pick Country, but we can set default country.
-                    defaultCountry: CscCountry.India,
-                    onStateChanged: (value) {
-                      setState(() {
-                        _selectedState = value;
-                        _selectedCity = null;
-                      });
-                    },
-                    onCityChanged: (value) {
-                      setState(() {
-                        _selectedCity = value;
-                      });
-                    },
-                    countryDropdownLabel: "Country",
-                    stateDropdownLabel: "State",
-                    cityDropdownLabel: "District",
                   ),
                   SizedBox(height: 40.h),
 
@@ -343,45 +389,26 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return TextFormField(
+    return AppInputField(
       controller: controller,
       obscureText: isPassword && _obscurePassword,
       keyboardType: keyboardType,
-      style: TextStyle(fontSize: 16.sp),
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.primary, size: 20.sp),
-        suffixIcon:
-            isPassword
-                ? IconButton(
-                  icon: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    color: AppColors.primary,
-                    size: 20.sp,
-                  ),
-                  onPressed:
-                      () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                )
-                : null,
-        hintText: hint,
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: AppColors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      ),
+      hintText: hint,
+      prefix: Icon(icon, color: AppColors.primary, size: 20.sp),
+      suffix:
+          isPassword
+              ? IconButton(
+                icon: Icon(
+                  _obscurePassword
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                  color: AppColors.primary,
+                  size: 20.sp,
+                ),
+                onPressed:
+                    () => setState(() => _obscurePassword = !_obscurePassword),
+              )
+              : null,
       validator: validator,
     );
   }
