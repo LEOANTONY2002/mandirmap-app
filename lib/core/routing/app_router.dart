@@ -22,6 +22,8 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/onboarding/presentation/providers/onboarding_provider.dart';
 import '../../features/reels/presentation/pages/reels_page.dart';
 import '../../features/temple_details/presentation/pages/temple_details_page.dart';
+import '../../features/deity/presentation/pages/deity_list_page.dart';
+import '../../features/deity/presentation/pages/deity_details_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier(ref);
@@ -84,6 +86,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final festival = state.extra as FestivalModel;
                       return FestivalDetailsPage(festival: festival);
                     },
+                  ),
+                  GoRoute(
+                    path: 'deities',
+                    builder: (context, state) => const DeityListPage(),
+                    routes: [
+                      GoRoute(
+                        path: 'details',
+                        builder: (context, state) {
+                          final deity = state.extra as DeityModel;
+                          return DeityDetailsPage(deity: deity);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

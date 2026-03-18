@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../../home/presentation/widgets/temple_card.dart';
-import '../../../temple_details/presentation/pages/temple_details_page.dart';
 import '../../../auth/presentation/providers/user_provider.dart';
 
 class DeityDetailsPage extends ConsumerWidget {
@@ -61,7 +61,7 @@ class DeityDetailsPage extends ConsumerWidget {
                 ),
                 child: const Icon(Icons.arrow_back, color: Colors.black),
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -185,14 +185,7 @@ class DeityDetailsPage extends ConsumerWidget {
                       child: TempleCard(
                         location: temple,
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      TempleDetailsPage(templeId: temple.id),
-                            ),
-                          );
+                          context.push('/home/temples/${temple.id}');
                         },
                       ),
                     );

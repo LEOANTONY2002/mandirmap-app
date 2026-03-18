@@ -234,7 +234,7 @@ class _FestivalSection extends ConsumerWidget {
         if (festivals.isEmpty) return const SizedBox.shrink();
 
         return SizedBox(
-          height: 240.h,
+          height: 290.h,
           child: ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             scrollDirection: Axis.horizontal,
@@ -267,7 +267,8 @@ class _FestivalCard extends StatelessWidget {
       },
       child: Container(
         width: 160.w,
-        height: 240.h,
+        height: 330.h,
+        margin: EdgeInsets.only(bottom: 20.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28.r),
           boxShadow: [
@@ -324,12 +325,12 @@ class _FestivalCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 8.h),
                   Text(
                     festival.description ?? festival.locationName ?? '',
                     style: TextStyle(
                       fontSize: 11.sp,
-                      color: Colors.white.withValues(alpha: 0.9),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
@@ -340,7 +341,7 @@ class _FestivalCard extends StatelessWidget {
                     DateFormat('MMM dd, yyyy').format(festival.startDate),
                     style: TextStyle(
                       fontSize: 10.sp,
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ],

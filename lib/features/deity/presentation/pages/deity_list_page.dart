@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/presentation/providers/home_providers.dart';
-import 'deity_details_page.dart';
 
 class DeityListPage extends ConsumerWidget {
   const DeityListPage({super.key});
@@ -28,7 +28,7 @@ class DeityListPage extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.textPrimary),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
       ),
       body: deitiesAsync.when(
@@ -40,7 +40,7 @@ class DeityListPage extends ConsumerWidget {
             padding: EdgeInsets.all(20.w),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              childAspectRatio: 0.8,
+              childAspectRatio: 0.7,
               crossAxisSpacing: 15.w,
               mainAxisSpacing: 20.h,
             ),
@@ -49,12 +49,7 @@ class DeityListPage extends ConsumerWidget {
               final deity = deities[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DeityDetailsPage(deity: deity),
-                    ),
-                  );
+                  context.push('/home/deities/details', extra: deity);
                 },
                 child: Column(
                   children: [
@@ -89,7 +84,7 @@ class DeityListPage extends ConsumerWidget {
                         color: AppColors.textPrimary,
                       ),
                       textAlign: TextAlign.center,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/home_providers.dart';
-import '../../../../features/deity/presentation/pages/deity_list_page.dart';
-import '../../../../features/deity/presentation/pages/deity_details_page.dart';
 
 class DeityList extends ConsumerWidget {
   const DeityList({super.key});
@@ -32,12 +31,7 @@ class DeityList extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DeityListPage(),
-                    ),
-                  );
+                  context.push('/home/deities');
                 },
                 child: Text(
                   'View all',
@@ -53,7 +47,7 @@ class DeityList extends ConsumerWidget {
         ),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 100.h,
+          height: 140.h,
           child: deitiesAsync.when(
             data: (deities) {
               if (deities.isEmpty) return const SizedBox.shrink();
@@ -67,50 +61,52 @@ class DeityList extends ConsumerWidget {
                   final deity = deities[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DeityDetailsPage(deity: deity),
-                        ),
-                      );
+                      context.push('/home/deities/details', extra: deity);
                     },
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 64.r,
-                          height: 64.r,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.surface,
-                            border: Border.all(
-                              color: AppColors.border.withValues(alpha: 0.3),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
+                    child: SizedBox(
+                      width: 72.w,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 64.r,
+                            height: 64.r,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.surface,
+                              border: Border.all(
+                                color: AppColors.border.withValues(alpha: 0.3),
                               ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: AppNetworkImage(
-                              url: deity.photoUrl,
-                              fit: BoxFit.cover,
-                              fallbackIcon: Icons.temple_hindu,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
+                              child: AppNetworkImage(
+                                url: deity.photoUrl,
+                                fit: BoxFit.cover,
+                                fallbackIcon: Icons.temple_hindu,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          deity.name,
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                          SizedBox(height: 8.h),
+                          Text(
+                            deity.name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.visible,
+                            softWrap: true,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
