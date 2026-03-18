@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/home_providers.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class DeityList extends ConsumerWidget {
   const DeityList({super.key});
@@ -112,7 +113,19 @@ class DeityList extends ConsumerWidget {
                 },
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              separatorBuilder: (context, index) => SizedBox(width: 16.w),
+              itemBuilder: (context, index) => Column(
+                children: [
+                  AppShimmer.circle(size: 64.r),
+                  SizedBox(height: 8.h),
+                  AppShimmer(width: 40.w, height: 12.h, borderRadius: 4),
+                ],
+              ),
+            ),
             error: (_, __) => const SizedBox.shrink(),
           ),
         ),

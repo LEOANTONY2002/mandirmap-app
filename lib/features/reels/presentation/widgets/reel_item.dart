@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/media_model.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class ReelItem extends StatefulWidget {
   final MediaModel media;
@@ -77,8 +77,11 @@ class _ReelItemState extends State<ReelItem> {
               child: VideoPlayer(_controller),
             )
           else
-            const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
+            const AppShimmer(
+              width: double.infinity,
+              height: double.infinity,
+              baseColor: Colors.black,
+              highlightColor: Colors.grey,
             ),
 
           // Gradient Overlay

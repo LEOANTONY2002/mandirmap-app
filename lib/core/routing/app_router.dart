@@ -24,6 +24,7 @@ import '../../features/reels/presentation/pages/reels_page.dart';
 import '../../features/temple_details/presentation/pages/temple_details_page.dart';
 import '../../features/deity/presentation/pages/deity_list_page.dart';
 import '../../features/deity/presentation/pages/deity_details_page.dart';
+import '../widgets/app_shimmer.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier(ref);
@@ -185,7 +186,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return isAuthPath ? null : '/login';
       }
 
-      if (userAsync.isLoading || userAsync.isRefreshing) {
+      // 3. Handle data-ready but loading/refreshing states
+      // ONLY redirect to loading if we have NO value yet and are loading.
+      // If we are just refreshing in background, we stay on the current page.
+      if (userAsync.isLoading && !userAsync.hasValue) {
         return isLoadingPath ? null : '/loading';
       }
 
@@ -222,7 +226,10 @@ class _LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: CircularProgressIndicator()),
+      body: AppShimmer(
+        width: double.infinity,
+        height: double.infinity,
+      ),
     );
   }
 }

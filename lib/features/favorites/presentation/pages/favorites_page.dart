@@ -6,6 +6,7 @@ import '../../../../core/widgets/app_network_image.dart';
 import '../../data/favorites_repository.dart';
 import '../providers/favorites_providers.dart';
 import '../../../home/data/models/location_model.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class FavoritesPage extends ConsumerStatefulWidget {
   const FavoritesPage({super.key, this.showBackButton = false});
@@ -58,7 +59,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
                 }
                 return _buildList(filtered);
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const ShimmerList(height: 150, padding: EdgeInsets.all(16)),
               error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),

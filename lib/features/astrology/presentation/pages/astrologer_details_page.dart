@@ -10,6 +10,7 @@ import '../../data/repositories/astrology_repository.dart';
 import '../providers/astrology_providers.dart';
 import '../../../auth/domain/user_model.dart';
 import '../../../auth/presentation/providers/user_provider.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 class AstrologerDetailsPage extends ConsumerStatefulWidget {
   final String id;
   const AstrologerDetailsPage({super.key, required this.id});
@@ -59,10 +60,10 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
       body: astrologerAsync.when(
         data: (astrologer) => currentUserAsync.when(
           data: (user) => _buildContent(astrologer, user),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const AstrologerDetailSkeleton(),
           error: (err, _) => Center(child: Text('Error: $err')),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const AstrologerDetailSkeleton(),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );

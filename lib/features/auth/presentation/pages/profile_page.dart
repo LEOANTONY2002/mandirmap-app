@@ -8,6 +8,7 @@ import '../../../../core/widgets/app_network_image.dart';
 import '../../domain/user_model.dart';
 import '../providers/user_provider.dart';
 import '../providers/auth_controller.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -47,7 +48,10 @@ class ProfilePage extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const AppShimmer(
+          width: double.infinity,
+          height: double.infinity,
+        ),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );

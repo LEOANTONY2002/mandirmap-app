@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../theme/app_colors.dart';
 
 /// A drop-in replacement for [Image.network] that shows a shimmer placeholder
@@ -62,20 +63,13 @@ class AppNetworkImage extends StatelessWidget {
   }
 
   Widget _shimmer() {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
+    return Shimmer.fromColors(
+      baseColor: AppColors.surface,
+      highlightColor: Colors.white,
+      child: Container(
+        width: width,
+        height: height,
         color: AppColors.surface,
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppColors.surface,
-            AppColors.border.withValues(alpha: 0.5),
-            AppColors.surface,
-          ],
-        ),
       ),
     );
   }

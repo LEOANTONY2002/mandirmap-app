@@ -2,8 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../temple_details/presentation/pages/temple_details_page.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 import '../providers/home_providers.dart';
 import '../widgets/temple_card.dart';
 
@@ -34,7 +35,7 @@ class NearbyTemplesPage extends ConsumerWidget {
             color: AppColors.textPrimary,
             size: 20.sp,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
       ),
       body: nearbyTemples.when(
@@ -51,19 +52,13 @@ class NearbyTemplesPage extends ConsumerWidget {
               return TempleCard(
                 location: temple,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => TempleDetailsPage(templeId: temple.id),
-                    ),
-                  );
+                  context.push('/home/temples/${temple.id}');
                 },
               );
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const ShimmerList(height: 120),
         error: (error, _) => Center(child: Text('Error: $error')),
       ),
     );

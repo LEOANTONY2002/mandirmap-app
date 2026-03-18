@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 
 class DeityListPage extends ConsumerWidget {
@@ -93,7 +94,7 @@ class DeityListPage extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const ShimmerGrid(),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );

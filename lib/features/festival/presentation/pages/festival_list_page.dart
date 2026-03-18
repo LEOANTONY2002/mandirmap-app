@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import 'festival_details_page.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class FestivalListPage extends ConsumerWidget {
   const FestivalListPage({super.key});
@@ -207,7 +208,7 @@ class FestivalListPage extends ConsumerWidget {
                   },
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const ShimmerList(height: 120, padding: EdgeInsets.all(20)),
               error: (err, _) => Center(child: Text('Error: $err')),
             ),
           ),

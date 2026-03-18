@@ -9,6 +9,7 @@ import 'package:mandirmap_app/features/home/data/repositories/home_repository.da
 import 'package:mandirmap_app/features/home/presentation/providers/home_providers.dart';
 import 'package:mandirmap_app/features/auth/presentation/providers/user_provider.dart';
 import 'package:mandirmap_app/features/astrology/data/models/review_model.dart';
+import 'package:mandirmap_app/core/widgets/app_shimmer.dart';
 
 final hotelDetailsProvider = FutureProvider.family<LocationModel, String>((
   ref,
@@ -64,7 +65,7 @@ class HotelDetailsPage extends ConsumerWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withValues(alpha: 0.7),
+                            Colors.black.withOpacity(0.7),
                           ],
                         ),
                       ),
@@ -244,7 +245,7 @@ class HotelDetailsPage extends ConsumerWidget {
         ),
       ),
       loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: HotelDetailSkeleton(),
       ),
       error: (err, _) => Scaffold(
         body: Center(child: Text('Error: $err')),

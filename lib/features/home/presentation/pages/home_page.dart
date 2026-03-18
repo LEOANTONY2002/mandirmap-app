@@ -10,6 +10,7 @@ import '../providers/home_providers.dart';
 import '../widgets/home_header.dart';
 import '../widgets/deity_list.dart';
 import '../widgets/temple_card.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -158,7 +159,7 @@ class _SearchResultsSection extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const ShimmerList(height: 84),
       error: (e, s) => Center(child: Text('Error: $e')),
     );
   }
@@ -248,7 +249,20 @@ class _FestivalSection extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => SizedBox(
+        height: 290.h,
+        child: ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          separatorBuilder: (context, index) => SizedBox(width: 12.w),
+          itemBuilder: (context, index) => AppShimmer(
+            width: 160.w,
+            height: 290.h,
+            borderRadius: 28,
+          ),
+        ),
+      ),
       error: (_, __) => const SizedBox.shrink(),
     );
   }
@@ -420,7 +434,7 @@ class _TempleNearBySection extends ConsumerWidget {
               },
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const ShimmerList(height: 120, padding: EdgeInsets.zero),
           error: (e, _) => Center(child: Text('Error: $e')),
         ),
       ],

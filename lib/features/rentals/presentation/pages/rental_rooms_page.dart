@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 import 'package:mandirmap_app/features/hotel_details/presentation/pages/hotel_details_page.dart';
 
@@ -59,7 +60,7 @@ class RentalRoomsPage extends ConsumerWidget {
                   },
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const ShimmerList(height: 250, isVertical: true),
               error: (err, _) => Center(child: Text('Error: $err')),
             ),
           ),

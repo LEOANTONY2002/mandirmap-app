@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../data/models/location_model.dart';
 import '../../data/repositories/home_repository.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class GenericLocationsPage extends ConsumerWidget {
   final String category;
@@ -53,7 +54,11 @@ class GenericLocationsPage extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const ShimmerGrid(
+          crossAxisCount: 2,
+          childAspectRatio: 0.85,
+          isCircle: false,
+        ),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );

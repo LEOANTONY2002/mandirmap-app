@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../providers/astrology_providers.dart';
 import '../../data/models/astrologer_model.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class AstrologyPage extends ConsumerWidget {
   const AstrologyPage({super.key});
@@ -53,8 +54,8 @@ class AstrologyPage extends ConsumerWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black.withValues(alpha: 0.1),
-                              Colors.black.withValues(alpha: 0.4),
+                              Colors.black.withOpacity(0.1),
+                              Colors.black.withOpacity(0.4),
                             ],
                           ),
                         ),
@@ -143,10 +144,13 @@ class AstrologyPage extends ConsumerWidget {
                   ),
                 );
               },
-              loading:
-                  () => const SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
+              loading: () => const SliverFillRemaining(
+                child: ShimmerList(
+                  height: 120, 
+                  isCircleAvatar: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+              ),
               error:
                   (err, _) => SliverFillRemaining(
                     child: Center(child: Text('Error: $err')),
@@ -273,7 +277,7 @@ class _AstrologerCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 4.h),
-                    if (astrologer.distance != null) 
+                    if (astrologer.distance != null)
                       Text(
                         '${(astrologer.distance! / 1000).toStringAsFixed(1)} Km away',
                         style: TextStyle(

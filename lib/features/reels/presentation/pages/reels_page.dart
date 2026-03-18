@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/reels_repository.dart';
 import '../../data/models/media_model.dart';
 import '../widgets/reel_item.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 final reelsProvider = FutureProvider<List<MediaModel>>((ref) async {
   return ref.watch(reelsRepositoryProvider).getReels();
@@ -45,10 +45,12 @@ class ReelsPage extends ConsumerWidget {
             },
           );
         },
-        loading:
-            () => const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            ),
+        loading: () => const AppShimmer(
+          width: double.infinity,
+          height: double.infinity,
+          baseColor: Colors.grey,
+          highlightColor: Colors.grey,
+        ),
         error:
             (err, stack) => Center(
               child: Text(

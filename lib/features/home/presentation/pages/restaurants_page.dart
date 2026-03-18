@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mandirmap_app/core/theme/app_colors.dart';
 import 'package:mandirmap_app/core/widgets/app_network_image.dart';
+import 'package:mandirmap_app/core/widgets/app_shimmer.dart';
 import 'package:mandirmap_app/features/home/data/models/location_model.dart';
 import 'package:mandirmap_app/features/home/presentation/providers/home_providers.dart';
-import 'package:mandirmap_app/features/hotel_details/presentation/pages/hotel_details_page.dart';
 
 class RestaurantsPage extends ConsumerWidget {
   const RestaurantsPage({super.key});
@@ -21,7 +22,7 @@ class RestaurantsPage extends ConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
         title: Text(
           'Hotels & Restaurants',
@@ -45,7 +46,7 @@ class RestaurantsPage extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const ShimmerList(height: 240),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );
@@ -54,12 +55,7 @@ class RestaurantsPage extends ConsumerWidget {
   Widget _buildRestaurantCard(BuildContext context, LocationModel restaurant) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HotelDetailsPage(hotelId: restaurant.id),
-          ),
-        );
+        context.push('/home/hotels/${restaurant.id}');
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20.h),

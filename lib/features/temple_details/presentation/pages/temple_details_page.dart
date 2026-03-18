@@ -10,6 +10,7 @@ import '../../../favorites/data/favorites_repository.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../../home/presentation/widgets/nearby_item_card.dart';
 import '../../../home/presentation/widgets/temple_card.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class TempleDetailsPage extends ConsumerWidget {
   const TempleDetailsPage({super.key, required this.templeId});
@@ -190,9 +191,7 @@ class TempleDetailsPage extends ConsumerWidget {
               ],
             ),
           ),
-      loading:
-          () =>
-              const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(body: TempleDetailSkeleton()),
       error:
           (err, stack) => Scaffold(
             appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
@@ -680,7 +679,12 @@ class _NearbyExploreList extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const ShimmerList(
+        itemCount: 2,
+        padding: EdgeInsets.zero,
+        isVertical: true,
+        height: 280,
+      ),
       error: (e, _) => Center(child: Text('Error: $e')),
     );
   }

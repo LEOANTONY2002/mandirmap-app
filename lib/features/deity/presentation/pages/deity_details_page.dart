@@ -8,6 +8,7 @@ import '../../../home/data/models/location_model.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 import '../../../home/presentation/widgets/temple_card.dart';
 import '../../../auth/presentation/providers/user_provider.dart';
+import '../../../../core/widgets/app_shimmer.dart';
 
 class DeityDetailsPage extends ConsumerWidget {
   final DeityModel deity;
@@ -32,9 +33,9 @@ class DeityDetailsPage extends ConsumerWidget {
 
         return _buildScaffold(context, templesAsync);
       },
-      loading:
-          () =>
-              const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(
+        body: HotelDetailSkeleton(),
+      ),
       error:
           (err, _) => Scaffold(
             body: Center(child: Text('Error loading location: $err')),
@@ -193,10 +194,12 @@ class DeityDetailsPage extends ConsumerWidget {
                 ),
               );
             },
-            loading:
-                () => SliverToBoxAdapter(
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
+            loading: () => const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ShimmerList(itemCount: 2, padding: EdgeInsets.zero),
+              ),
+            ),
             error:
                 (err, _) => SliverToBoxAdapter(
                   child: Center(child: Text('Error loading temples: $err')),
