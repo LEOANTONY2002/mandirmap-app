@@ -41,7 +41,7 @@ class DeityListPage extends ConsumerWidget {
             padding: EdgeInsets.all(20.w),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              childAspectRatio: 0.7,
+              childAspectRatio: 0.65,
               crossAxisSpacing: 15.w,
               mainAxisSpacing: 20.h,
             ),
@@ -54,7 +54,8 @@ class DeityListPage extends ConsumerWidget {
                 },
                 child: Column(
                   children: [
-                    Expanded(
+                    AspectRatio(
+                      aspectRatio: 1.0,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -97,6 +98,36 @@ class DeityListPage extends ConsumerWidget {
         loading: () => const ShimmerGrid(),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
+    );
+  }
+}
+
+class ShimmerGrid extends StatelessWidget {
+  const ShimmerGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: EdgeInsets.all(20.w),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 15.w,
+        mainAxisSpacing: 20.h,
+      ),
+      itemCount: 9,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1.0,
+              child: AppShimmer.circle(size: double.infinity),
+            ),
+            SizedBox(height: 10.h),
+            AppShimmer(width: 60.w, height: 12.h, borderRadius: 4),
+          ],
+        );
+      },
     );
   }
 }

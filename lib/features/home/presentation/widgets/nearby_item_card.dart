@@ -200,7 +200,7 @@ class NearbyItemCard extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                              padding: EdgeInsets.symmetric(vertical: 14.h),
                             ),
                           ),
                         ),

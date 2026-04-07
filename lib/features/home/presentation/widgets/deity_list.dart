@@ -48,7 +48,7 @@ class DeityList extends ConsumerWidget {
         ),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 140.h,
+          height: 160.h,
           child: deitiesAsync.when(
             data: (deities) {
               if (deities.isEmpty) return const SizedBox.shrink();
@@ -68,28 +68,29 @@ class DeityList extends ConsumerWidget {
                       width: 72.w,
                       child: Column(
                         children: [
-                          Container(
-                            width: 64.r,
-                            height: 64.r,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.surface,
-                              border: Border.all(
-                                color: AppColors.border.withValues(alpha: 0.3),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.05),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
+                          AspectRatio(
+                            aspectRatio: 1.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.surface,
+                                border: Border.all(
+                                  color: AppColors.border.withValues(alpha: 0.3),
                                 ),
-                              ],
-                            ),
-                            child: ClipOval(
-                              child: AppNetworkImage(
-                                url: deity.photoUrl,
-                                fit: BoxFit.cover,
-                                fallbackIcon: Icons.temple_hindu,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.05),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: ClipOval(
+                                child: AppNetworkImage(
+                                  url: deity.photoUrl,
+                                  fit: BoxFit.cover,
+                                  fallbackIcon: Icons.temple_hindu,
+                                ),
                               ),
                             ),
                           ),

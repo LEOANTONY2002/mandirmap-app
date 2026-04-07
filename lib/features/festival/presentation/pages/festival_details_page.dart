@@ -20,9 +20,14 @@ class FestivalDetailsPage extends StatelessWidget {
             expandedHeight: 300.h,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.only(left: 20.w, bottom: 16.h),
               title: Text(
                 festival.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18.sp,
+                ),
               ),
               background: AppNetworkImage(
                 url: festival.photoUrl,
@@ -155,35 +160,6 @@ class FestivalDetailsPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Reminder feature coming soon!')),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 50.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.r),
-            ),
-          ),
-          child: const Text('Set Reminder'),
-        ),
       ),
     );
   }

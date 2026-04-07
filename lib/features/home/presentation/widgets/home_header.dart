@@ -18,10 +18,12 @@ class HomeHeader extends ConsumerStatefulWidget {
 
 class _HomeHeaderState extends ConsumerState<HomeHeader> {
   Timer? _debounce;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -30,6 +32,13 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       ref.read(searchQueryProvider.notifier).update(value);
     });
+    setState(() {}); // Re-build to show/hide clear icon
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    ref.read(searchQueryProvider.notifier).update('');
+    setState(() {});
   }
 
   @override
@@ -107,6 +116,7 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
           ),
           SizedBox(height: 20.h),
           AppInputField(
+            controller: _searchController,
             onChanged: _onSearchChanged,
             hintText: 'Search place or temples',
             prefix: Icon(
@@ -114,6 +124,16 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
               color: const Color(0xFFFF6A3D),
               size: 20.sp,
             ),
+            suffix: _searchController.text.isNotEmpty
+                ? GestureDetector(
+                    onTap: _clearSearch,
+                    child: Icon(
+                      Icons.cancel,
+                      color: const Color(0xFFB7B7B7),
+                      size: 20.sp,
+                    ),
+                  )
+                : null,
             hintStyle: TextStyle(
               color: const Color(0xFFB7B7B7),
               fontSize: 13.sp,
