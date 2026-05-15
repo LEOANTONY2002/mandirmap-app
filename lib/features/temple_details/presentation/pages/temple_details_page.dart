@@ -84,7 +84,7 @@ class TempleDetailsPage extends ConsumerWidget {
                                 child: Text(
                                   temple.name,
                                   style: TextStyle(
-                                    fontSize: 24.sp,
+                                    fontSize: 26.sp,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -103,7 +103,7 @@ class TempleDetailsPage extends ConsumerWidget {
                                   'Show in Map',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 12.sp,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -282,7 +282,7 @@ class _QuickActionGrid extends ConsumerWidget {
                       action['label'] as String,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 9.sp,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                         height: 1.2,
@@ -466,7 +466,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
     return Text(
       history,
       style: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 16.sp,
         color: AppColors.textPrimary,
         height: 1.6,
       ),
@@ -506,7 +506,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
             Expanded(
               child: Text(
                 widget.temple.addressText,
-                style: TextStyle(fontSize: 14.sp, color: AppColors.textPrimary),
+                style: TextStyle(fontSize: 16.sp, color: AppColors.textPrimary),
               ),
             ),
           ],
@@ -537,7 +537,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
         Text(
           'Note: Timings may vary during festivals and special occasions.',
           style: TextStyle(
-            fontSize: 12.sp,
+            fontSize: 14.sp,
             color: AppColors.textSecondary,
             fontStyle: FontStyle.italic,
           ),
@@ -581,7 +581,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
                   Text(
                     item['name']?.toString() ?? 'Pooja',
                     style: TextStyle(
-                      fontSize: 15.sp,
+                      fontSize: 17.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -590,7 +590,7 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
                     style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.sp,
+                      fontSize: 17.sp,
                     ),
                   ),
                 ],
@@ -610,11 +610,11 @@ class _TempleDetailSectionState extends State<_TempleDetailSection>
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 12.sp, color: AppColors.textSecondary),
+              style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
             ),
             Text(
               value,
-              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
             ),
           ],
         ),

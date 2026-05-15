@@ -112,7 +112,7 @@ class AppInputField extends StatelessWidget {
                       style:
                           textStyle ??
                           TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.textPrimary,
                           ),
@@ -122,7 +122,7 @@ class AppInputField extends StatelessWidget {
                             hintStyle ??
                             TextStyle(
                               color: const Color(0xFF9E9E9E),
-                              fontSize: 15.sp,
+                              fontSize: 17.sp,
                               fontWeight: FontWeight.w400,
                             ),
                         contentPadding:
@@ -156,7 +156,7 @@ class AppInputField extends StatelessWidget {
                   field.errorText!,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.error,
-                    fontSize: 12.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

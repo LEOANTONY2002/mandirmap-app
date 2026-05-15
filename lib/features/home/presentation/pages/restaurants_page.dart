@@ -28,7 +28,7 @@ class RestaurantsPage extends ConsumerWidget {
           'Hotels & Restaurants',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -95,7 +95,7 @@ class RestaurantsPage extends ConsumerWidget {
                         child: Text(
                           restaurant.name,
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -115,7 +115,7 @@ class RestaurantsPage extends ConsumerWidget {
                               '${restaurant.averageRating.toStringAsFixed(1)} ',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12.sp,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -131,7 +131,7 @@ class RestaurantsPage extends ConsumerWidget {
                         ? 'South Indian • Pure Veg • Thali'
                         : 'South Indian • Non-Veg Available',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -149,7 +149,7 @@ class RestaurantsPage extends ConsumerWidget {
                       Text(
                         '30-40 mins',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           color: AppColors.textSecondary,
                         ),
                       ),
@@ -164,7 +164,7 @@ class RestaurantsPage extends ConsumerWidget {
                         child: Text(
                           restaurant.addressText,
                           style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             color: AppColors.textSecondary,
                           ),
                           maxLines: 1,

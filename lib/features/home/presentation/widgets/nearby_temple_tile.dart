@@ -65,7 +65,7 @@ class NearbyTempleTile extends StatelessWidget {
                 Text(
                   location.name,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -83,7 +83,7 @@ class NearbyTempleTile extends StatelessWidget {
                       child: Text(
                         '${location.addressText} | ${location.distance != null ? (location.distance! / 1000).toStringAsFixed(1) : "0.0"} km',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           color: AppColors.textSecondary,
                         ),
                       ),

@@ -24,7 +24,7 @@ class ProfilePage extends ConsumerWidget {
           'Profile',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 24.sp,
+            fontSize: 26.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -89,7 +89,7 @@ class ProfilePage extends ConsumerWidget {
               Text(
                 user.fullName,
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -98,7 +98,7 @@ class ProfilePage extends ConsumerWidget {
               Text(
                 user.phoneNumber,
                 style: TextStyle(
-                  fontSize: 13.sp,
+                  fontSize: 15.sp,
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
@@ -107,7 +107,7 @@ class ProfilePage extends ConsumerWidget {
               Text(
                 user.email,
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 14.sp,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -208,7 +208,7 @@ class ProfilePage extends ConsumerWidget {
                 Text(
                   'choose_language'.tr(),
                   style: TextStyle(
-                    fontSize: 22.sp,
+                    fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -217,7 +217,7 @@ class ProfilePage extends ConsumerWidget {
                 Text(
                   'choose_language_desc'.tr(),
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     color: AppColors.textSecondary,
                   ),
                 ),
@@ -262,7 +262,7 @@ class ProfilePage extends ConsumerWidget {
         title: Text(
           title,
           style: TextStyle(
-            fontSize: 15.sp,
+            fontSize: 17.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.textPrimary,
           ),
@@ -314,7 +314,7 @@ class _LanguageTile extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color:
                           isSelected
@@ -325,7 +325,7 @@ class _LanguageTile extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),

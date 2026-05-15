@@ -93,7 +93,7 @@ class DeityDetailsPage extends ConsumerWidget {
                       deity.name,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 28.sp,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
                         shadows: [
                           Shadow(
@@ -118,7 +118,7 @@ class DeityDetailsPage extends ConsumerWidget {
                   Text(
                     'About Lord ${deity.name}',
                     style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -127,7 +127,7 @@ class DeityDetailsPage extends ConsumerWidget {
                   Text(
                     'Lord ${deity.name} is one of the most revered deities in Hindu mythology. Temples dedicated to this deity are centers of spiritual energy and devotion.',
                     style: TextStyle(
-                      fontSize: 15.sp,
+                      fontSize: 17.sp,
                       color: AppColors.textSecondary,
                       height: 1.6,
                     ),
@@ -136,7 +136,7 @@ class DeityDetailsPage extends ConsumerWidget {
                   Text(
                     'Famous Temples',
                     style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
@@ -167,7 +167,7 @@ class DeityDetailsPage extends ConsumerWidget {
                             'No specific temples listed yet for ${deity.name}',
                             style: TextStyle(
                               color: AppColors.textSecondary,
-                              fontSize: 14.sp,
+                              fontSize: 16.sp,
                             ),
                           ),
                         ],

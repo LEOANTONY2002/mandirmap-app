@@ -131,7 +131,7 @@ class _SearchResultsSection extends ConsumerWidget {
                           Text(
                             result.name,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -139,7 +139,7 @@ class _SearchResultsSection extends ConsumerWidget {
                           Text(
                             result.addressText,
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               color: AppColors.textSecondary,
                             ),
                             maxLines: 1,
@@ -209,7 +209,7 @@ class _CategoryBar extends ConsumerWidget {
                           isSelected ? Colors.white : AppColors.textSecondary,
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.w500,
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),
@@ -332,7 +332,7 @@ class _FestivalCard extends StatelessWidget {
                   Text(
                     festival.name,
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       height: 1.1,
@@ -344,7 +344,7 @@ class _FestivalCard extends StatelessWidget {
                   Text(
                     festival.description ?? festival.locationName ?? '',
                     style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 13.sp,
                       color: Colors.white.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w400,
                     ),
@@ -355,7 +355,7 @@ class _FestivalCard extends StatelessWidget {
                   Text(
                     DateFormat('MMM dd, yyyy').format(festival.startDate),
                     style: TextStyle(
-                      fontSize: 10.sp,
+                      fontSize: 12.sp,
                       color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
@@ -387,7 +387,7 @@ class _TempleNearBySection extends ConsumerWidget {
               Text(
                 'Temple Near by Me',
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -399,7 +399,7 @@ class _TempleNearBySection extends ConsumerWidget {
                 child: Text(
                   'View all',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                   ),

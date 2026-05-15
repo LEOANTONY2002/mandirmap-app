@@ -26,7 +26,7 @@ class FestivalDetailsPage extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                 ),
               ),
               background: AppNetworkImage(
@@ -59,7 +59,7 @@ class FestivalDetailsPage extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
@@ -76,7 +76,7 @@ class FestivalDetailsPage extends StatelessWidget {
                   Text(
                     festival.name,
                     style: TextStyle(
-                      fontSize: 24.sp,
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -92,7 +92,7 @@ class FestivalDetailsPage extends StatelessWidget {
                       Text(
                         '${DateFormat('MMM dd').format(festival.startDate)} - ${DateFormat('MMM dd, yyyy').format(festival.endDate)}',
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.w600,
                         ),
@@ -103,7 +103,7 @@ class FestivalDetailsPage extends StatelessWidget {
                   Text(
                     'About Festival',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -112,7 +112,7 @@ class FestivalDetailsPage extends StatelessWidget {
                     festival.description ??
                         'A traditional celebration featuring cultural performances, divine rituals, and community gatherings. This festival marks an important event in the temple calendar, attracting thousands of devotees.',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       color: AppColors.textSecondary,
                       height: 1.6,
                     ),
@@ -122,7 +122,7 @@ class FestivalDetailsPage extends StatelessWidget {
                     Text(
                       'Location (Temple)',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

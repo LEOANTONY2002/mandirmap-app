@@ -29,7 +29,7 @@ class RentalRoomsPage extends ConsumerWidget {
           'Rental & Rooms',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -83,7 +83,7 @@ class RentalRoomsPage extends ConsumerWidget {
         borderRadius: 15,
         boxShadow: const [],
         containerPadding: EdgeInsets.symmetric(horizontal: 15.w),
-        hintStyle: TextStyle(fontSize: 14.sp),
+        hintStyle: TextStyle(fontSize: 16.sp),
       ),
     );
   }
@@ -152,7 +152,7 @@ class RentalRoomsPage extends ConsumerWidget {
                       '₹${hotel.hotel?.pricePerDay ?? 0} / night',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -172,7 +172,7 @@ class RentalRoomsPage extends ConsumerWidget {
                         child: Text(
                           hotel.name,
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -183,7 +183,7 @@ class RentalRoomsPage extends ConsumerWidget {
                           Text(
                             ' ${hotel.averageRating.toStringAsFixed(1)}',
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -204,7 +204,7 @@ class RentalRoomsPage extends ConsumerWidget {
                         child: Text(
                           hotel.addressText,
                           style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             color: AppColors.textSecondary,
                           ),
                           maxLines: 1,
@@ -245,7 +245,7 @@ class RentalRoomsPage extends ConsumerWidget {
         SizedBox(width: 4.w),
         Text(
           label,
-          style: TextStyle(fontSize: 11.sp, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 13.sp, color: AppColors.textSecondary),
         ),
       ],
     );

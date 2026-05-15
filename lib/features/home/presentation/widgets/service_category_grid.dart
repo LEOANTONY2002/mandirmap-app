@@ -144,7 +144,7 @@ class ServiceCategoryGrid extends StatelessWidget {
                   labelKey.tr(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),

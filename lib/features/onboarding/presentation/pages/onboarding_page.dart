@@ -119,7 +119,7 @@ class _SplashStep extends StatelessWidget {
               'MANDIR MAP',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.sp,
+                fontSize: 34.sp,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2,
               ),
@@ -129,7 +129,7 @@ class _SplashStep extends StatelessWidget {
               'welcome_msg'.tr().toUpperCase(),
               style: TextStyle(
                 color: Colors.white.withAlpha(230),
-                fontSize: 14.sp,
+                fontSize: 16.sp,
                 letterSpacing: 1.2,
               ),
             ),
@@ -143,7 +143,7 @@ class _SplashStep extends StatelessWidget {
               'tap_to_continue'.tr(),
               style: TextStyle(
                 color: Colors.white.withAlpha(128),
-                fontSize: 12.sp,
+                fontSize: 14.sp,
               ),
             ),
           ],
@@ -167,7 +167,7 @@ class _LanguageStep extends StatelessWidget {
           Text(
             'choose_language'.tr(),
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: 26.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
             ),
@@ -175,7 +175,7 @@ class _LanguageStep extends StatelessWidget {
           SizedBox(height: 10.h),
           Text(
             'choose_language_desc'.tr(),
-            style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
+            style: TextStyle(fontSize: 16.sp, color: AppColors.textSecondary),
           ),
           SizedBox(height: 40.h),
           _LanguageCard(
@@ -210,7 +210,7 @@ class _LanguageStep extends StatelessWidget {
               child: Text(
                 'next'.tr(),
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -259,7 +259,7 @@ class _LanguageCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color:
                           isSelected
@@ -270,7 +270,7 @@ class _LanguageCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -334,7 +334,7 @@ class _PermissionStep extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 22.sp,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -344,7 +344,7 @@ class _PermissionStep extends StatelessWidget {
                 description,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 16.sp,
                   color: AppColors.textSecondary,
                   height: 1.5,
                 ),

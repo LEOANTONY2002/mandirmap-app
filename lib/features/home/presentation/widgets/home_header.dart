@@ -85,7 +85,7 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                     Text(
                       'namaste'.tr(),
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 14.sp,
                         color: AppColors.textSecondary,
                         fontWeight: FontWeight.w500,
                       ),
@@ -93,7 +93,7 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                     Text(
                       displayName,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 20.sp,
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.bold,
                         height: 1.2,
@@ -136,11 +136,11 @@ class _HomeHeaderState extends ConsumerState<HomeHeader> {
                 : null,
             hintStyle: TextStyle(
               color: const Color(0xFFB7B7B7),
-              fontSize: 13.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w400,
             ),
             textStyle: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w500,
             ),
             cursorHeight: 20.h,

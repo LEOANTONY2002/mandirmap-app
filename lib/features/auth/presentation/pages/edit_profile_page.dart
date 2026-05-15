@@ -133,7 +133,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
           'Edit Profile',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -278,18 +278,18 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                   ),
                   selectedItemStyle: TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 15.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
                     height: 2.5,
                   ),
                   dropdownHeadingStyle: TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 16.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
                   dropdownItemStyle: TextStyle(
                     color: AppColors.textPrimary,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                   ),
                   dropdownDialogRadius: 10.0,
                   searchBarRadius: 10.0,
@@ -348,7 +348,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                           : Text(
                             'Save Changes',
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -379,7 +379,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 14.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
         ),
@@ -401,7 +401,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         keyboardType: keyboardType,
         hintText: hint,
         prefix: Icon(icon, color: AppColors.primary, size: 20.sp),
-        textStyle: TextStyle(fontSize: 15.sp, color: AppColors.textPrimary),
+        textStyle: TextStyle(fontSize: 17.sp, color: AppColors.textPrimary),
         validator:
             isOptional
                 ? null

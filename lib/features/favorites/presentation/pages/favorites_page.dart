@@ -55,7 +55,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage>
           'My Favorites',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -169,7 +169,7 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage>
         children: [
           Icon(Icons.favorite_border, size: 64.r, color: Colors.grey[300]),
           SizedBox(height: 16.h),
-          Text(message, style: TextStyle(color: Colors.grey, fontSize: 16.sp)),
+          Text(message, style: TextStyle(color: Colors.grey, fontSize: 18.sp)),
         ],
       ),
     );
@@ -220,7 +220,7 @@ class _TempleFavoriteCard extends StatelessWidget {
                     location.name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -228,7 +228,7 @@ class _TempleFavoriteCard extends StatelessWidget {
                     '${location.district ?? ""}, Kerala',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
-                      fontSize: 13.sp,
+                      fontSize: 15.sp,
                     ),
                   ),
                 ],
@@ -334,7 +334,7 @@ class _RestaurantFavoriteCard extends ConsumerWidget {
                       child: Text(
                         location.name,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
@@ -357,7 +357,7 @@ class _RestaurantFavoriteCard extends ConsumerWidget {
                           Text(
                             location.averageRating.toString(),
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -371,7 +371,7 @@ class _RestaurantFavoriteCard extends ConsumerWidget {
                   'Location Details, ${location.distance != null ? (location.distance! / 1000).toStringAsFixed(1) : "1.2"} Km',
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.5),
-                    fontSize: 11.sp,
+                    fontSize: 13.sp,
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -389,7 +389,7 @@ class _RestaurantFavoriteCard extends ConsumerWidget {
                       'Pure Veg',
                       style: TextStyle(
                         color: Colors.green,
-                        fontSize: 11.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -454,7 +454,7 @@ class _RoomFavoriteCard extends ConsumerWidget {
                         location.averageRating.toString(),
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -495,7 +495,7 @@ class _RoomFavoriteCard extends ConsumerWidget {
                     Text(
                       location.name,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -504,7 +504,7 @@ class _RoomFavoriteCard extends ConsumerWidget {
                       'Location | ${location.distance != null ? (location.distance! / 1000).toStringAsFixed(1) : "1.5"} km away',
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.5),
-                        fontSize: 12.sp,
+                        fontSize: 14.sp,
                       ),
                     ),
                   ],
@@ -512,7 +512,7 @@ class _RoomFavoriteCard extends ConsumerWidget {
                 Text(
                   '₹${location.hotel?.pricePerDay ?? 2000}/ Day',
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),

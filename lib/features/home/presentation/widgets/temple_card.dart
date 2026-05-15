@@ -72,7 +72,7 @@ class TempleCard extends StatelessWidget {
                         location.name,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
@@ -94,7 +94,7 @@ class TempleCard extends StatelessWidget {
                                 '${location.district ?? ""} | ${(location.distance! / 1000).toStringAsFixed(1)} km',
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.8),
-                                  fontSize: 10.sp,
+                                  fontSize: 12.sp,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -117,7 +117,7 @@ class TempleCard extends StatelessWidget {
                                 location.district ?? "",
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.8),
-                                  fontSize: 10.sp,
+                                  fontSize: 12.sp,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

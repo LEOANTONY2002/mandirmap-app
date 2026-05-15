@@ -25,7 +25,7 @@ class DeityList extends ConsumerWidget {
               Text(
                 'List of Gods',
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -37,7 +37,7 @@ class DeityList extends ConsumerWidget {
                 child: Text(
                   'View all',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                   ),
@@ -99,7 +99,7 @@ class DeityList extends ConsumerWidget {
                             deity.name,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),

@@ -140,7 +140,7 @@ class _ReelItemState extends State<ReelItem> {
                       widget.media.userName ?? 'Anonymous User',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -149,7 +149,7 @@ class _ReelItemState extends State<ReelItem> {
                 SizedBox(height: 12.h),
                 Text(
                   'Blessings from ${widget.media.locationName ?? 'Sacred Temple'} 🙏 #mandirmap #spirituality',
-                  style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -166,7 +166,7 @@ class _ReelItemState extends State<ReelItem> {
       children: [
         Icon(icon, color: Colors.white, size: 32.r),
         SizedBox(height: 4.h),
-        Text(label, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+        Text(label, style: TextStyle(color: Colors.white, fontSize: 14.sp)),
       ],
     );
   }

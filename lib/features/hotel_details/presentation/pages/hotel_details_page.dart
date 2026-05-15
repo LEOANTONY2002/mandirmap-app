@@ -139,7 +139,7 @@ class _HotelDetailsPageState extends ConsumerState<HotelDetailsPage> {
                 'This detail page only supports rentals and restaurants.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 16.sp,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -256,7 +256,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                           Text(
                             location.averageRating.toStringAsFixed(1),
                             style: TextStyle(
-                              fontSize: 13.sp,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -308,7 +308,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                           child: Text(
                             location.name,
                             style: TextStyle(
-                              fontSize: 20.sp,
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -317,7 +317,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                         Text(
                           '₹${hotel?.pricePerDay.toStringAsFixed(0) ?? '0'}/Night',
                           style: TextStyle(
-                            fontSize: 15.sp,
+                            fontSize: 17.sp,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -336,7 +336,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                           child: Text(
                             location.addressText,
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               color: AppColors.textSecondary,
                             ),
                           ),
@@ -460,7 +460,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 10.sp,
+                                              fontSize: 12.sp,
                                               height: 1.25,
                                             ),
                                           ),
@@ -474,7 +474,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                                     Text(
                                       location.description!,
                                       style: TextStyle(
-                                        fontSize: 12.sp,
+                                        fontSize: 14.sp,
                                         height: 1.6,
                                         color: AppColors.textSecondary,
                                       ),
@@ -502,7 +502,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                                           1,
                                         ),
                                         style: TextStyle(
-                                          fontSize: 28.sp,
+                                          fontSize: 30.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -513,7 +513,7 @@ class _RentalDetailsState extends State<_RentalDetails>
                                     child: Text(
                                       '${location.totalRatings} Ratings',
                                       style: TextStyle(
-                                        fontSize: 11.sp,
+                                        fontSize: 13.sp,
                                         color: AppColors.textSecondary,
                                       ),
                                     ),
@@ -680,7 +680,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                         Text(
                           location.averageRating.toStringAsFixed(1),
                           style: TextStyle(
-                            fontSize: 11.sp,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -716,7 +716,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                 child: Text(
                   location.name,
                   style: TextStyle(
-                    fontSize: 19.sp,
+                    fontSize: 21.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -769,13 +769,13 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                             size: 20.sp,
                           ),
                           textStyle: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColors.textPrimary,
                           ),
                           hintStyle: TextStyle(
                             color: const Color(0xFF9E9E9E),
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                           ),
                           cursorHeight: 20.h,
@@ -849,7 +849,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              fontSize: 12.sp,
+                                              fontSize: 14.sp,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
@@ -857,7 +857,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                                           Text(
                                             '₹${item.price.toStringAsFixed(0)}',
                                             style: TextStyle(
-                                              fontSize: 12.sp,
+                                              fontSize: 14.sp,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -893,7 +893,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                             Text(
                               location.averageRating.toStringAsFixed(1),
                               style: TextStyle(
-                                fontSize: 28.sp,
+                                fontSize: 30.sp,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -904,7 +904,7 @@ class _RestaurantDetailsState extends ConsumerState<_RestaurantDetails>
                           child: Text(
                             '${location.totalRatings} Ratings',
                             style: TextStyle(
-                              fontSize: 11.sp,
+                              fontSize: 13.sp,
                               color: AppColors.textSecondary,
                             ),
                           ),
@@ -1009,12 +1009,12 @@ class _ReviewSummary extends StatelessWidget {
         children: [
           Text(
             location.averageRating.toStringAsFixed(1),
-            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 4.h),
           Text(
             '${location.totalRatings} ratings',
-            style: TextStyle(fontSize: 12.sp, color: AppColors.textSecondary),
+            style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
           ),
           SizedBox(height: 12.h),
           ElevatedButton(
@@ -1080,7 +1080,7 @@ class _ReviewCard extends ConsumerWidget {
                 Text(
                   review.user?.fullName ?? 'Guest User',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1100,7 +1100,7 @@ class _ReviewCard extends ConsumerWidget {
                   Text(
                     review.comment!,
                     style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 13.sp,
                       color: AppColors.textSecondary,
                       height: 1.45,
                     ),
@@ -1223,7 +1223,7 @@ class _ReviewFormPageState extends ConsumerState<_ReviewFormPage> {
             children: [
               Text(
                 'Share your experience',
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 16.h),
               AppInputField(
@@ -1236,7 +1236,7 @@ class _ReviewFormPageState extends ConsumerState<_ReviewFormPage> {
                 contentPadding: EdgeInsets.all(16.w),
                 hintStyle: TextStyle(
                   color: AppColors.textSecondary,
-                  fontSize: 13.sp,
+                  fontSize: 15.sp,
                 ),
               ),
               SizedBox(height: 24.h),
@@ -1334,7 +1334,7 @@ class _ReviewSuccessPage extends StatelessWidget {
               SizedBox(height: 18.h),
               Text(
                 rating.toString(),
-                style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 10.h),
               const Text(

@@ -119,7 +119,7 @@ class _SegmentButton extends StatelessWidget {
               item.label,
               style: TextStyle(
                 color: contentColor,
-                fontSize: 13.sp,
+                fontSize: 15.sp,
                 fontWeight: selection > 0.5 ? FontWeight.w700 : FontWeight.w600,
               ),
             ),

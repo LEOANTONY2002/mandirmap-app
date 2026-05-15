@@ -106,7 +106,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Text(
                     'Welcome',
                     style: TextStyle(
-                      fontSize: 28.sp,
+                      fontSize: 30.sp,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
                       letterSpacing: -0.5,
@@ -116,7 +116,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Text(
                     'Please enter your details to sign in',
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 18.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -126,7 +126,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Text(
                     'Email Address',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
@@ -162,7 +162,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Text(
                     'Password',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
@@ -214,7 +214,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         style: TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                         ),
                       ),
                     ),
@@ -243,7 +243,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               : Text(
                                 'Sign In',
                                 style: TextStyle(
-                                  fontSize: 16.sp,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -260,7 +260,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           "Don't have an account? ",
                           style: TextStyle(
                             color: AppColors.textSecondary,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp,
                           ),
                         ),
                         GestureDetector(
@@ -272,7 +272,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 14.sp,
+                              fontSize: 16.sp,
                             ),
                           ),
                         ),

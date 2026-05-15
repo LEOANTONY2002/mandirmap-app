@@ -67,13 +67,13 @@ class _AstrologyChatPageState extends State<AstrologyChatPage> {
                     widget.astrologer.name,
                     style: TextStyle(
                       color: AppColors.textPrimary,
-                      fontSize: 16.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'Online',
-                    style: TextStyle(color: Colors.green, fontSize: 12.sp),
+                    style: TextStyle(color: Colors.green, fontSize: 14.sp),
                   ),
                 ],
               ),
@@ -209,7 +209,7 @@ class _ChatBubble extends StatelessWidget {
               text,
               style: TextStyle(
                 color: isMe ? Colors.white : AppColors.textPrimary,
-                fontSize: 14.sp,
+                fontSize: 16.sp,
                 height: 1.4,
               ),
             ),
@@ -217,7 +217,7 @@ class _ChatBubble extends StatelessWidget {
           SizedBox(height: 4.h),
           Text(
             time,
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 10.sp),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 12.sp),
           ),
         ],
       ),

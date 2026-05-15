@@ -164,7 +164,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                   Text(
                     astrologer.rating.toStringAsFixed(1),
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -183,7 +183,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                       child: Text(
                         astrologer.name,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
                         ),
@@ -201,7 +201,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                 Text(
                   astrologer.languages.join(", "),
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     color: AppColors.textSecondary,
                   ),
                 ),
@@ -209,7 +209,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                 Text(
                   '${astrologer.experienceYears}+ Year of Experience',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 14.sp,
                     color: AppColors.textSecondary,
                   ),
                 ),
@@ -218,7 +218,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                   Text(
                     '${(astrologer.distance! / 1000).toStringAsFixed(1)} Km away',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: Colors.blue,
                       fontWeight: FontWeight.w500,
                     ),
@@ -232,7 +232,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
               Text(
                 '₹${astrologer.hourlyRate.toInt()}/Hr',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
@@ -249,7 +249,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                   ),
                 ),
               ),
@@ -329,7 +329,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
+                fontSize: 18.sp,
               ),
             ),
           ],
@@ -416,7 +416,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                     ),
                     child: Row(
                       children: [
-                        Text('Add Review', style: TextStyle(fontSize: 14.sp)),
+                        Text('Add Review', style: TextStyle(fontSize: 16.sp)),
                         SizedBox(width: 5.w),
                         const Icon(Icons.add, size: 16),
                       ],
@@ -431,7 +431,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                 Text(
                   astrologer.rating.toStringAsFixed(1),
                   style: TextStyle(
-                    fontSize: 32.sp,
+                    fontSize: 34.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -439,7 +439,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                   '${astrologer.totalRatings} Ratings',
                   style: TextStyle(
                     color: AppColors.textSecondary,
-                    fontSize: 13.sp,
+                    fontSize: 15.sp,
                   ),
                 ),
               ],
@@ -493,7 +493,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
                         review.user!.fullName.isNotEmpty)
                     ? review.user!.fullName
                     : 'Anonymous User',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
               ),
               const Spacer(),
               if (isMyReview)
@@ -540,7 +540,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
             review.comment ?? '',
             style: TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 13.sp,
+              fontSize: 15.sp,
               height: 1.4,
             ),
           ),
@@ -578,7 +578,7 @@ class _AstrologerDetailsPageState extends ConsumerState<AstrologerDetailsPage>
           astrologer.bio ?? '',
           style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             height: 1.6,
           ),
         ),
@@ -755,7 +755,7 @@ class _AstrologerReviewFormPageState
             children: [
               Text(
                 'Share your experience',
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 16.h),
               AppInputField(
@@ -768,7 +768,7 @@ class _AstrologerReviewFormPageState
                 contentPadding: EdgeInsets.all(16.w),
                 hintStyle: TextStyle(
                   color: AppColors.textSecondary,
-                  fontSize: 13.sp,
+                  fontSize: 15.sp,
                 ),
               ),
               SizedBox(height: 24.h),
@@ -796,7 +796,7 @@ class _AstrologerReviewFormPageState
                 SizedBox(height: 16.h),
                 Text(
                   _errorMessage!,
-                  style: TextStyle(color: Colors.red, fontSize: 14.sp),
+                  style: TextStyle(color: Colors.red, fontSize: 16.sp),
                 ),
               ],
               const Spacer(),
@@ -873,7 +873,7 @@ class _AstrologerReviewSuccessPage extends StatelessWidget {
               SizedBox(height: 18.h),
               Text(
                 rating.toString(),
-                style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 10.h),
               const Text(

@@ -22,7 +22,7 @@ class DeityListPage extends ConsumerWidget {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontSize: 20.sp,
+            fontSize: 22.sp,
           ),
         ),
         backgroundColor: Colors.white,
@@ -81,7 +81,7 @@ class DeityListPage extends ConsumerWidget {
                     Text(
                       deity.name,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),

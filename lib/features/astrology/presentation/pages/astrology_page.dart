@@ -46,7 +46,7 @@ class _AstrologyPageState extends ConsumerState<AstrologyPage> {
           'Astrology',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 20.sp,
+            fontSize: 22.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -88,7 +88,7 @@ class _AstrologyPageState extends ConsumerState<AstrologyPage> {
                   prefix: const Icon(Icons.search, color: AppColors.primary),
                   hintStyle: TextStyle(
                     color: AppColors.textSecondary,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                   ),
                   borderRadius: 20,
                   borderColor: AppColors.border,
@@ -223,7 +223,7 @@ class _AstrologerCard extends StatelessWidget {
                       Text(
                         astrologer.rating.toStringAsFixed(1),
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -243,7 +243,7 @@ class _AstrologerCard extends StatelessWidget {
                           child: Text(
                             astrologer.name,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
@@ -265,7 +265,7 @@ class _AstrologerCard extends StatelessWidget {
                     Text(
                       astrologer.languages.join(", "),
                       style: TextStyle(
-                        fontSize: 13.sp,
+                        fontSize: 15.sp,
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -273,7 +273,7 @@ class _AstrologerCard extends StatelessWidget {
                     Text(
                       '${astrologer.experienceYears}+ Year of Experience',
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 14.sp,
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -282,7 +282,7 @@ class _AstrologerCard extends StatelessWidget {
                       Text(
                         '${(astrologer.distance! / 1000).toStringAsFixed(1)} Km away',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           color: Colors.blue,
                           fontWeight: FontWeight.w500,
                         ),
@@ -302,7 +302,7 @@ class _AstrologerCard extends StatelessWidget {
                 Text(
                   '₹ ${astrologer.hourlyRate.toInt()}/Hr',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -322,7 +322,7 @@ class _AstrologerCard extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                     ),
                   ),
                 ),

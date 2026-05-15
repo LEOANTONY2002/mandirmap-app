@@ -131,7 +131,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           'Create Account',
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -149,7 +149,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   Text(
                     'Join MandirMap',
                     style: TextStyle(
-                      fontSize: 24.sp,
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
                     ),
@@ -158,7 +158,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   Text(
                     'Fill in your details to get started',
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 18.sp,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -288,18 +288,18 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                       selectedItemStyle: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 15.sp,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w500,
                         height: 2.5,
                       ),
                       dropdownHeadingStyle: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                       dropdownItemStyle: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                       ),
                       dropdownDialogRadius: 10.0,
                       searchBarRadius: 10.0,
@@ -351,7 +351,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               : Text(
                                 'Sign Up',
                                 style: TextStyle(
-                                  fontSize: 16.sp,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -373,7 +373,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 14.sp,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
         ),

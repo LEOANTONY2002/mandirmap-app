@@ -23,7 +23,7 @@ class NearbyTemplesPage extends ConsumerWidget {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
           ),
         ),
         backgroundColor: Colors.white,

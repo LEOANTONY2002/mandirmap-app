@@ -25,7 +25,7 @@ class FestivalListPage extends ConsumerWidget {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
-            fontSize: 20.sp,
+            fontSize: 22.sp,
           ),
         ),
         backgroundColor: Colors.white,
@@ -83,7 +83,7 @@ class FestivalListPage extends ConsumerWidget {
                                     isSelected
                                         ? Colors.white
                                         : AppColors.textPrimary,
-                                fontSize: 13.sp,
+                                fontSize: 15.sp,
                                 fontWeight:
                                     isSelected
                                         ? FontWeight.bold
@@ -159,7 +159,7 @@ class FestivalListPage extends ConsumerWidget {
                                     Text(
                                       festival.name,
                                       style: TextStyle(
-                                        fontSize: 16.sp,
+                                        fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.textPrimary,
                                       ),
@@ -180,7 +180,7 @@ class FestivalListPage extends ConsumerWidget {
                                             'MMM dd, yyyy',
                                           ).format(festival.startDate),
                                           style: TextStyle(
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             color: AppColors.textSecondary,
                                           ),
                                         ),
@@ -191,7 +191,7 @@ class FestivalListPage extends ConsumerWidget {
                                       festival.description ??
                                           'Experience the divine celebration and cultural heritage.',
                                       style: TextStyle(
-                                        fontSize: 11.sp,
+                                        fontSize: 13.sp,
                                         color: AppColors.textSecondary,
                                       ),
                                       maxLines: 2,

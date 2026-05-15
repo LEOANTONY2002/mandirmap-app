@@ -36,7 +36,7 @@ class GenericLocationsPage extends ConsumerWidget {
           title,
           style: TextStyle(
             color: AppColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -101,7 +101,7 @@ class GenericLocationsPage extends ConsumerWidget {
                       child: Text(
                         location.name,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -112,7 +112,7 @@ class GenericLocationsPage extends ConsumerWidget {
                         Text(
                           ' ${location.averageRating}',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -133,7 +133,7 @@ class GenericLocationsPage extends ConsumerWidget {
                       child: Text(
                         location.addressText,
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                           color: AppColors.textSecondary,
                         ),
                         maxLines: 1,

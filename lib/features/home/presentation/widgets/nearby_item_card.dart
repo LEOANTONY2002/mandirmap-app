@@ -73,7 +73,7 @@ class NearbyItemCard extends StatelessWidget {
                           Text(
                             location.averageRating.toStringAsFixed(1),
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -99,7 +99,7 @@ class NearbyItemCard extends StatelessWidget {
                           'PURE VEG',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 10.sp,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -120,7 +120,7 @@ class NearbyItemCard extends StatelessWidget {
                         child: Text(
                           location.name,
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.textPrimary,
                           ),
@@ -134,7 +134,7 @@ class NearbyItemCard extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp,
                           ),
                         ),
                     ],
@@ -152,7 +152,7 @@ class NearbyItemCard extends StatelessWidget {
                         child: Text(
                           '${location.addressText} | ${location.distance != null ? (location.distance! / 1000).toStringAsFixed(1) : "0.0"} km',
                           style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             color: AppColors.textSecondary,
                           ),
                           maxLines: 1,
@@ -167,7 +167,7 @@ class NearbyItemCard extends StatelessWidget {
                     Text(
                       'Specials: ${location.restaurant!.menuItems.take(2).map((item) => item.name).join(", ")}...',
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 14.sp,
                         color: AppColors.textSecondary,
                         fontStyle: FontStyle.italic,
                       ),
@@ -192,7 +192,7 @@ class NearbyItemCard extends StatelessWidget {
                               'Call',
                               style: TextStyle(
                                 color: AppColors.primary,
-                                fontSize: 13.sp,
+                                fontSize: 15.sp,
                               ),
                             ),
                             style: OutlinedButton.styleFrom(
@@ -220,7 +220,7 @@ class NearbyItemCard extends StatelessWidget {
                               'WhatsApp',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 13.sp,
+                                fontSize: 15.sp,
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
